@@ -1,0 +1,83 @@
+
+==============================================================================
+1. PREPROCESSING & FEATURE ENGINEERING
+==============================================================================
+Monthly rows 10,992 -> consumers 999
+Clustering features (8): ['financial_health_score', 'spend_to_income_ratio', 'credit_utilization_ratio', 'spending_volatility', 'engagement_score', 'transaction_count', 'discretionary_spend_ratio', 'online_spend_ratio']
+Nulls after aggregation: 0
+
+==============================================================================
+2. MODEL SELECTION - k via elbow + silhouette (k=2..8)
+==============================================================================
+  k      inertia   silhouette
+  2       5212.2       0.5574
+  3       3720.0       0.2952
+  4       3227.8       0.2508
+  5       2879.5       0.2318
+  6       2669.6       0.2197
+  7       2478.2       0.2057
+  8       2301.0       0.2170
+
+Silhouette winner overall: k=2 (0.5574)
+Chosen k=4 (best silhouette in the interpretable 4-6 range = 0.2508) - k=2/3 over-collapse the personas the case asks for.
+
+==============================================================================
+3. VALIDATION
+==============================================================================
+Coverage: 999/999 consumers assigned to exactly one segment (PASS)
+Final silhouette (k=4): 0.2510
+Cluster sizes:
+cluster
+0    302
+1     88
+2    351
+3    258
+
+==============================================================================
+4. SEGMENT PROFILES (cluster means, unscaled)
+==============================================================================
+Global means:
+financial_health_score        66.303
+spend_to_income_ratio          0.693
+credit_utilization_ratio       0.190
+spending_volatility            1.490
+engagement_score              75.401
+transaction_count            155.327
+discretionary_spend_ratio      0.546
+online_spend_ratio             0.247
+
+Per-cluster means:
+           n   pct  financial_health_score  spend_to_income_ratio  credit_utilization_ratio  spending_volatility  engagement_score  transaction_count  discretionary_spend_ratio  online_spend_ratio
+cluster                                                                                                                                                                                             
+0        302  30.2                  62.640                  0.835                     0.248                1.423            76.524            119.023                      0.519               0.208
+1         88   8.8                  65.694                  0.614                     0.173                0.679            49.550              9.744                      0.866               0.671
+2        351  35.1                  70.490                  0.571                     0.148                1.443            77.421            152.722                      0.513               0.200
+3        258  25.8                  65.101                  0.718                     0.188                1.910            80.156            251.022                      0.514               0.212
+
+Business labels:
+  cluster 0: Financially Stretched but Highly Engaged  (n=302, 30.2%)
+  cluster 1: Low Engagement & Emerging Digital  (n=88, 8.8%)
+  cluster 2: Financially Healthy & Highly Engaged  (n=351, 35.1%)
+  cluster 3: High-Activity Digital Power Users  (n=258, 25.8%)
+
+==============================================================================
+5. RULE-BASED 2x2 CROSS-CHECK (validation, not the delivered model)
+==============================================================================
+Split on medians: FHS=66.2, engagement=78.2
+Rule-based 2x2 sizes:
+rule2x2
+Stretched+Engaged        260
+Healthy+Disengaged       258
+Healthy+Engaged          243
+Vulnerable+Disengaged    238
+
+k-means x rule-2x2 crosstab (agreement check):
+rule2x2  Healthy+Disengaged  Healthy+Engaged  Stretched+Engaged  Vulnerable+Disengaged
+cluster                                                                               
+0                        26                3                110                    163
+1                        39                0                  0                     49
+2                       182              162                  2                      5
+3                        11               78                148                     21
+
+Saved draft/task4_features.csv  (999 rows, 15 cols incl. cluster/segment/demographics)
+Final coverage recheck: 999/999 labelled.

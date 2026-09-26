@@ -1,0 +1,83 @@
+
+==============================================================================
+Q1 - Peak vs trough month: driver = count or ticket?
+==============================================================================
+                            sum   count  avg_ticket  pct_annual
+transaction_month                                              
+1                  185570433000  104727   1771945.0         6.0
+2                  174365111000   97657   1785485.0         5.0
+3                  254750003000  143789   1771693.0         8.0
+4                  236320934000  134970   1750915.0         7.0
+5                  257623444000  146875   1754032.0         8.0
+6                  305572891000  173869   1757489.0         9.0
+7                  299556013000  172444   1737121.0         9.0
+8                  304519084000  176118   1729063.0         9.0
+9                  246520864000  140185   1758540.0         8.0
+10                 243005639000  138106   1759559.0         7.0
+11                 248795833000  143056   1739150.0         8.0
+12                 488032709000  280598   1739259.0        15.0
+
+Annual total spend: 3.24T VND
+PEAK  month 12: 488.03B VND (15.04% of annual) | 280,598 txns | ticket 1.74M VND
+TROUGH month 2: 174.37B VND (5.37% of annual) | 97,657 txns | ticket 1.79M VND
+Peak vs trough: spend +179.9%, count +187.3%, ticket -2.6%
+-> Driver = TRANSACTION COUNT
+
+==============================================================================
+Q2 - Essential vs Discretionary: stressed (FHS<40) vs healthy (FHS>=80)
+==============================================================================
+Stressed  (FHS<40) : 95 consumer-months / 70 consumers | Essential 28.4% | Discretionary 71.6% | mean essential_spend_ratio 0.288
+Healthy   (FHS>=80): 475 consumer-months / 303 consumers | Essential 59.5% | Discretionary 40.5% | mean essential_spend_ratio 0.611
+
+==============================================================================
+Q3 - High-spend provinces with below-average digital share
+==============================================================================
+National digital txn share: 41.2%  (POS 58.8%)
+
+High-spend (> median 82.69B VND) AND digital < national avg:
+  Hà Nội             spend    267.26B VND | digital  40.9% | POS  59.1% | gap -0.3pp
+  Đồng Nai           spend    183.07B VND | digital  40.7% | POS  59.3% | gap -0.5pp
+  Lâm Đồng           spend    135.39B VND | digital  41.1% | POS  58.9% | gap -0.1pp
+  Hưng Yên           spend    116.44B VND | digital  40.8% | POS  59.2% | gap -0.4pp
+  Hải Phòng          spend    103.15B VND | digital  40.8% | POS  59.2% | gap -0.3pp
+  Nghệ An            spend    101.73B VND | digital  41.2% | POS  58.8% | gap -0.0pp
+
+==============================================================================
+Q4 - Top category by count vs by spend; ticket comparison
+==============================================================================
+                                           sum   count  avg_ticket
+spending_category                                                 
+Siêu thị và tạp hóa tại cửa hàng  513773547000  176191   2916003.0
+Mua sắm tại cửa hàng              328376283000  166463   1972668.0
+Mua sắm trực tuyến                302823009000  139322   2173548.0
+Xăng dầu và di chuyển             298389366000  188029   1586933.0
+Nhà cửa và tiện ích               255242623000  175460   1454705.0
+Trẻ em và thú cưng                232595055000  161727   1438196.0
+Giải trí                          215068315000  134118   1603575.0
+Dịch vụ trực tuyến khác           181718969000   90654   2004533.0
+Mua sắm khác tại cửa hàng         178986707000  114229   1566911.0
+Ăn uống                           166660047000  130729   1274851.0
+Sức khỏe và thể thao              165716089000  122553   1352199.0
+Du lịch                           161945086000   57956   2794276.0
+Chăm sóc cá nhân                  156257711000  130085   1201197.0
+Tạp hóa trực tuyến                 87080151000   64878   1342214.0
+
+Top by COUNT: Xăng dầu và di chuyển -> 188,029 txns, ticket 1.59M VND
+Top by SPEND: Siêu thị và tạp hóa tại cửa hàng -> 513.77B VND, ticket 2.92M VND
+Ticket ratio (spend-leader / count-leader): 1.8x
+
+==============================================================================
+Q5 - Age cohort: active but lowest financial health
+==============================================================================
+        consumers  avg_fhs  avg_txn  avg_active_days  ess_ratio  spend_to_income
+cohort                                                                          
+15-24          69   65.940  221.605           28.436      0.355            0.676
+25-34         177   65.785  178.745           28.940      0.468            0.716
+35-44         165   66.442  199.360           29.275      0.464            0.694
+45-54         198   65.980  176.860           28.847      0.493            0.712
+55-64         175   66.997  129.574           27.936      0.508            0.696
+65+           215   66.856  139.147           28.160      0.509            0.685
+
+Most vulnerable (active but lowest FHS): cohort 25-34
+  avg FHS 65.8 vs cohort best 67.0 | txns 178.7 | ess_ratio 0.468 | spend/income 0.716
+  National mean spend/income 0.700, ess_ratio 0.481
