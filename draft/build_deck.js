@@ -323,7 +323,7 @@ contentOne(++N, "Task 3 · Engagement · D5", "High-health, low-engagement: 25 g
     note: "The sensitivity numbers answer 'why this cutoff and not a stricter or looser one'." });
 
 contentOne(++N, "Task 4 · Segmentation · Method", "Preprocessing, features and model choice",
-  ["Preprocessing: 10,992 consumer-months → 999 consumers (yearly mean of each ratio = typical monthly profile); 0 nulls after aggregation; raw VND excluded.",
+  ["Preprocessing: 10,992 consumer-months → 999 consumers (yearly mean of each ratio = typical monthly profile); 0 nulls after aggregation; raw VND excluded. The preprocessed dataset (task4_features.csv) and its data dictionary are in the submission ZIP.",
    "8 features, z-scaled: health (FHS, spend-to-income, credit-utilization, volatility) · engagement (engagement score, transaction count) · spending (discretionary, online ratio).",
    "Excluded with reason: essential ratio (= 1 − discretionary), diversity / active days / recency (p75 = max, near-constant); demographics kept for profiling only.",
    "k-means over a pure 2×2: boundaries form across all 8 dimensions. k = 4 via elbow + best silhouette in the 4–6 range (0.251; k = 2 wins at 0.557 but collapses the personas). Coverage 999 / 999, 7 minors kept."],
@@ -344,6 +344,7 @@ contentTwo(++N, "Task 4 · Segmentation · Profiles", "Four segments, side by si
   tag(s, "Task 4 · Segmentation · Validation & limits"); heading(s, "Stable segments, a December slide — and honest limits");
   s.addText(bulletList([
     "Stability: 20 random seeds → ARI 0.988; 80% bootstrap × 50 → ARI 0.911. Alternative GMM: ARI 0.26 — Emerging Digital identical, the three large segments form one continuum (hence silhouette 0.251).",
+    "Rule-based cross-check (2×2 median split of health × engagement): 344 of 351 Healthy and 273 of 302 Stretched customers fall in the matching halves.",
     "Monthly migration: a Healthy month is followed by a Stretched month 23% of the time — 72% from November to December.",
     "Bias check: segments correlate with age & gender (chi-square p < 0.01) though not inputs → trigger every tool on behaviour, never on demographics.",
   ], 12), { x: 0.5, y: 1.6, w: 6.4, h: 2.85, isTextBox: true, valign: "top" });
