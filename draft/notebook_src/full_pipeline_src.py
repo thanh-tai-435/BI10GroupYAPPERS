@@ -664,14 +664,14 @@ print(export.shape)
 
 # %%
 sizes = seg.segment.value_counts()
-distress_tail = seg[(seg.financial_health_score < 70) & (seg.engagement_score < 70)]
+distress_tail = seg[(seg.financial_health_score < 70) & (seg.engagement_score < 70)]  # yearly means, both below 70
 targets = pd.DataFrame([
     ("Budgeting tool", "Stretched & Engaged", sizes["Stretched & Engaged"], "spend_to_income_ratio", "financial_health_score", "wellbeing"),
     ("Spend alerts", "Stressed & engaged crossover", crossover.consumer_id.nunique(), "credit_utilization_ratio", "financial_health_score", "wellbeing"),
     ("Planning reminders", "High-Activity Users", sizes["High-Activity Users"], "spending_volatility", "financial_health_score", "wellbeing"),
     ("Financial education", "Low health & low engagement", len(distress_tail), "discretionary_spend_ratio", "financial_health_score", "wellbeing"),
     ("Digital nudges", "Occasional Online-First", sizes["Occasional Online-First"], "category_diversity", "engagement_score", "growth"),
-    ("Product suggestions", "Healthy & Engaged (adults)", sizes["Healthy & Engaged"], "credit_utilization_ratio", "engagement_score", "growth"),
+    ("Product suggestions", "Healthy & Engaged (adults 18+)", int(((seg.segment == "Healthy & Engaged") & (demo.age >= 18)).sum()), "credit_utilization_ratio", "engagement_score", "growth"),
 ], columns=["tool", "target group", "reach", "trigger column", "outcome", "track"])
 targets["% of 999"] = (100 * targets.reach / 999).round(1)
 # driver strength = |r| between the trigger column and the outcome the tool should move (month level)
@@ -705,7 +705,7 @@ print("stressed months outside the stretched segment:", (~in_stretched & (mon.fi
 # 2. Planning reminders for the 258 high-activity customers, with a year-end plan sent in November before the December drop.
 # 3. Spend alerts for the 43 crossover customers (52% of stress months): opt-in, in the evening before 22:00. Small but precise, so launched first.
 # 4. Financial education for the 67 low-health, low-engagement customers: short needs-vs-wants content.
-# 5. Product suggestions for the 351 healthy adults: opt-in savings or loyalty products, never a credit-line increase.
+# 5. Product suggestions for the 350 adults (18+) in Healthy & Engaged (1 minor excluded): opt-in savings or loyalty products, never a credit-line increase.
 # 6. Digital nudges for the 88 occasional online customers, inside the channels they already use (staggered with education for the 64 who get both).
 #
 # In the scenario above, a 10% cut in spend-to-income for the stretched segment would reduce stressed months from 95 to about 65 (68 with the slope estimated inside the segment), a 28–32% cut. Each tool should be tested against a random holdout group with one KPI.
@@ -777,15 +777,25 @@ ax.set(xlim=(-14, 29), xlabel="Share of spend value: stressed minus healthy mont
 deck_save(fig, "deck_q2_shift")
 
 # %%
-# Task 1 Q3: digital gap of the six high-spend provinces
-gapp = (gap_provinces["digital_%"] - national_digital).sort_values().rename(index=EN_PROV)
+# Task 1 Q3: channel breakdown (POS vs four digital channels) of the six high-spend provinces vs national
+mixp = by_count.rename(index=EN_PROV)
+mixp = pd.concat([mixp.drop("National").loc[(gap_provinces["digital_%"] - national_digital).sort_values().rename(index=EN_PROV).index], mixp.loc[["National"]]])
 fig, ax = plt.subplots(figsize=BIG)
-bars = ax.barh(gapp.index, gapp.values, color=[NAVY if v <= -0.3 else MID for v in gapp.values], height=0.55)
-ax.bar_label(bars, fmt="%.2f pp", padding=4, fontsize=10)
-ax.axvline(0, color="#8A97A6", lw=1); ax.grid(axis="y", visible=False)
-ax.set(xlim=(-0.7, 0.1), xlabel=f"Digital share of transactions vs national {national_digital:.1f}% (percentage points)",
-       title=f"Gaps are under half a point (all 34 provinces sit within {prov['digital_%'].min():.1f}–{prov['digital_%'].max():.1f}%)")
-ax.invert_yaxis()
+left = np.zeros(len(mixp))
+for ch, colr, lab in zip(channels, [NAVY, BLUE, MID, LIGHT, PALE], ["POS", "QR", "E-commerce", "Mobile App", "Recurring"]):
+    ax.barh(mixp.index, mixp[ch], left=left, color=colr, height=0.6, label=lab, edgecolor="white", lw=0.5)
+    for y_, (l_, v_) in enumerate(zip(left, mixp[ch])):
+        if v_ > 6:
+            ax.text(l_ + v_ / 2, y_, f"{v_:.1f}", ha="center", va="center", fontsize=8.5, color="white" if colr in (NAVY, BLUE) else INK)
+    left += mixp[ch].values
+for y_, n_ in enumerate(mixp.index):
+    d_ = 100 - mixp.loc[n_, "POS"]
+    ax.text(101.5, y_, f"digital {d_:.1f}%" + ("" if n_ == "National" else f" ({d_ - national_digital:+.2f}pp)"),
+            va="center", fontsize=9.5, fontweight="bold" if n_ == "National" else "normal")
+ax.invert_yaxis(); ax.grid(False); ax.spines["bottom"].set_bounds(0, 100)
+ax.set(xlim=(0, 135), xticks=range(0, 101, 20), xlabel="% of transactions by channel",
+       title=f"Same mix as the nation: POS ≈ 59%, gaps ≤ 0.46pp (all 34 provinces: {prov['digital_%'].min():.1f}–{prov['digital_%'].max():.1f}% digital)")
+ax.legend(ncol=5, loc="lower center", bbox_to_anchor=(0.4, -0.25), fontsize=9)
 deck_save(fig, "deck_q3_gap")
 
 # %%
@@ -802,13 +812,19 @@ for n, r in c4.iterrows():
 ax.set(xlabel="Transactions (thousands)", ylabel="Average ticket (M VND)", title="Fuel = frequent habit; groceries = big basket")
 deck_save(fig, "deck_q4_categories")
 
-fig, (a1, a2) = plt.subplots(1, 2, figsize=HALF)
+fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=HALF)
 cc = [NAVY if str(c_) == "25-34" else LIGHT for c_ in cohorts.index]
-b1 = a1.bar(cohorts.index.astype(str), cohorts.avg_fhs, color=cc); a1.bar_label(b1, fmt="%.1f", fontsize=8)
-a1.set(ylim=(60, 68.5), title="Mean FHS"); a1.tick_params(axis="x", labelsize=8, rotation=45)
-b2 = a2.bar(cohorts.index.astype(str), cohorts.spend_to_income, color=cc); a2.bar_label(b2, fmt="%.2f", fontsize=8)
+b1 = a1.bar(cohorts.index.astype(str), cohorts.avg_fhs, color=cc); a1.bar_label(b1, fmt="%.1f", fontsize=7)
+a1.set(ylim=(60, 68.5), title="Mean FHS")
+b2 = a2.bar(cohorts.index.astype(str), cohorts.spend_to_income, color=cc); a2.bar_label(b2, fmt="%.3f", fontsize=6.5)
 a2.axhline(mon.spend_to_income_ratio.mean(), color=MID, ls="--", lw=1)
-a2.set(ylim=(0.6, 0.74), title="Spend-to-income (-- national)"); a2.tick_params(axis="x", labelsize=8, rotation=45)
+a2.set(ylim=(0.6, 0.74), title="Spend-to-income")
+b3 = a3.bar(cohorts.index.astype(str), cohorts.essential_ratio, color=cc); a3.bar_label(b3, fmt="%.3f", fontsize=6.5)
+a3.axhline(mon.essential_spend_ratio.mean(), color=MID, ls="--", lw=1)
+a3.set(ylim=(0.30, 0.55), title="Essential ratio")
+for a_ in (a1, a2, a3):
+    a_.tick_params(axis="x", labelsize=7.5, rotation=45); a_.tick_params(axis="y", labelsize=7.5); a_.title.set_fontsize(10)
+fig.text(0.5, -0.02, "Dashed line = national average", ha="center", fontsize=8, color=MID)
 deck_save(fig, "deck_q5_cohorts")
 
 # %%
@@ -992,7 +1008,7 @@ ax.barh(tg.tool, tg.score, color=[NAVY if t_ == "wellbeing" else LIGHT for t_ in
 for y_, (sc_, rc_, dr_) in enumerate(tg[["score", "reach", "driver |r|"]].values):
     ax.text(sc_ + 4, y_, f"{sc_:.0f}  ({rc_:.0f} × {dr_:.2f})", va="center", fontsize=10)
 ax.grid(axis="y", visible=False)
-ax.set(xlim=(0, 340), xlabel="Priority score = reach × |r| of trigger with outcome", title="Wellbeing tools first (dark), then growth tools (light)")
+ax.set(xlim=(0, 340), xlabel="Priority score = reach × |r| of trigger with outcome", title="Ranking heuristic, not an impact estimate: wellbeing (dark) before growth (light)")
 deck_save(fig, "deck_t5_priority")
 
 cuts_s = [0, 0.05, 0.10, 0.15]

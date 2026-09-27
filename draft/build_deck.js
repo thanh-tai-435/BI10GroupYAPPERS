@@ -4,7 +4,7 @@ const pptxgen = require("pptxgenjs");
 const path = require("path");
 
 const FIG = path.resolve(__dirname, "..", "outputs", "figures");
-const OUT = path.resolve(__dirname, "YAPPERS_BI10_R01.pptx");
+const OUT = process.env.OUT || path.resolve(__dirname, "YAPPERS_BI10_R01.pptx");
 
 // ---- blue & white theme ----
 const NAVY = "0B2545", BLUE = "1F5FA8", MID = "4A90D9", LIGHT = "A9C6EA", PALE = "EEF4FB";
@@ -18,7 +18,7 @@ p.title = "ITB Consumer Wellbeing & Segmentation — Group YAPPERS";
 const SRC_M = "consumer_financial_health_engagement_2025 (10,992 consumer-months, 999 customers)";
 const SRC_T = "consumer_transactions_2025 (1,852,394 transactions)";
 const SRC_J = "transactions joined to consumer-months";
-const SRC_K = "team k-means (k = 4) on 8 scaled ratios, 999 customers";
+const SRC_K = "team k-means (k = 4) on 8 z-scaled behavioural features, 999 customers";
 
 // ---------- helpers ----------
 const T = (s, text, o) => s.addText(text, Object.assign({ isTextBox: true, margin: 0, fontFace: FONT, color: INK }, o));
@@ -40,7 +40,7 @@ function panel(s, big, label, points, o = {}) {
   T(s, big, { x: x + 0.25, y: y + 0.2, w: w - 0.5, h: 0.85, fontSize: o.bigSize || 40, bold: true, color: BLUE });
   T(s, label, { x: x + 0.25, y: y + 1.05, w: w - 0.5, h: 0.6, fontSize: 11, color: MUTE, valign: "top" });
   T(s, points.map((t, i) => ({ text: t, options: { bullet: true, breakLine: i < points.length - 1, paraSpaceAfter: 8 } })),
-    { x: x + 0.25, y: y + 1.75, w: w - 0.45, h: h - 1.9, fontSize: 12, color: INK, valign: "top" });
+    { x: x + 0.25, y: y + 1.75, w: w - 0.45, h: h - 1.9, fontSize: o.fs || 12, color: INK, valign: "top" });
 }
 // three insight cards along the bottom
 function cards(s, items, y = 5.72) {
@@ -101,7 +101,7 @@ function slideWide(n, section, title, chartName, items, src, notes) {
     ["T2", "52%", "Stress is episodic and concentrated", "Spend-to-income (r −0.90) drives health. Nobody is stressed all year, yet 87% dip below 60; 43 active customers hold 52% of stress months."],
     ["T3", "91", "Engagement is saturated", "91% of customers are High / Very high; the entire low tail is 91 customers seen on only 1–2 days. Breadth and regular use drive engagement."],
     ["T4", "4", "Four stable segments, 100% covered", "Healthy 351 · Stretched 302 · High-Activity 258 · Occasional 88; stable across seeds (ARI 0.99). December cuts health ~13 pts in every segment."],
-    ["T5", "−28–32%", "Six opt-in tools, one rule", "Budgeting → November reminders → evening alerts lead. A 10% spend trim could cut stress months 28–32%. FHS never touches credit."],
+    ["T5", "−28–32%", "Six opt-in tools, one rule", "Budgeting → November reminders → evening alerts lead. In a what-if, a 10% spend trim cuts stress months 28–32% (to be tested). FHS never touches credit."],
   ];
   rows.forEach((r, i) => {
     const y = 1.75 + i * 1.02;
@@ -112,7 +112,7 @@ function slideWide(n, section, title, chartName, items, src, notes) {
     T(s, r[3], { x: 4.45, y: y + 0.38, w: 8.3, h: 0.5, fontSize: 11.5, color: INK, valign: "top" });
   });
   footer(s, 2);
-  s.addNotes("One row per task: signal, driver, engagement, segments, plan. The 82% (T2) is the variance explained by spend-to-income and utilization; the 28–32% is a what-if tested with holdouts (slide 21).");
+  s.addNotes("One row per task: signal, driver, engagement, segments, plan. The 52% (T2) is the share of the 95 stress months held by the 43 crossover customers; spend-to-income and utilization explain 82% of FHS; the 28–32% is a simulated what-if, to be tested against holdouts (slide 21).");
 })();
 
 // ============ 3 · AGENDA ============
@@ -121,7 +121,7 @@ function slideWide(n, section, title, chartName, items, src, notes) {
   header(s, "Contents", "What this deck covers");
   const items = [["01", "Introduction & data quality", "slide 4"], ["02", "Task 1 — Exploratory data analysis", "slides 5–8"],
     ["03", "Task 2 — Financial health", "slides 9–12"], ["04", "Task 3 — Customer engagement", "slides 13–15"],
-    ["05", "Task 4 — Customer segmentation", "slides 16–18"], ["06", "Task 5 — Recommendations & impact", "slides 19–22"]];
+    ["05", "Task 4 — Customer segmentation", "slides 16–18"], ["06", "Task 5 — Recommendations & impact", "slides 19–21 · closing 22"]];
   items.forEach((it, i) => {
     const col = i % 2, row = Math.floor(i / 2);
     const x = 0.6 + col * 6.15, y = 1.9 + row * 1.55;
@@ -152,7 +152,7 @@ function slideWide(n, section, title, chartName, items, src, notes) {
   T(s, "Data-quality checks (both files)", { x: 7.1, y: 2.0, w: 5.4, h: 0.4, fontSize: 14, bold: true, color: NAVY });
   const dq = [["✓", "0 missing cells, 0 duplicate IDs, 0 negative amounts"], ["✓", "All timestamps in 2025; 1 name per customer and merchant"],
     ["✓", "Transactions reconcile 100% to monthly spend (10,992 months)"], ["✓", "7 minors kept; 5 over-limit months kept as real behaviour"],
-    ["!", "908 customers have 12 months; 91 appear on only 1–2 days"], ["!", "Two source years folded onto 2025 (case §12) → ratios are the signal"]];
+    ["!", "908 customers have 12 months; 91 appear on only 1–2 days"], ["!", "Two source years folded onto 2025 (case study §12) → ratios are the signal"]];
   dq.forEach((d, i) => {
     const y = 2.55 + i * 0.66;
     s.addShape(p.ShapeType.ellipse, { x: 7.1, y: y + 0.05, w: 0.36, h: 0.36, fill: { color: d[0] === "✓" ? BLUE : WHITE }, line: { color: BLUE, width: 1.2 } });
@@ -181,16 +181,17 @@ slideTwo(6, "Task 1 · EDA · Q2", "Under stress the budget flips: 71.6% discret
 
 slideOne(7, "Task 1 · EDA · Q3", "High-spend provinces trail the national digital share by at most 0.46pp",
   "deck_q3_gap", "≤ 0.46pp", "largest digital gap among high-spend provinces",
-  ["6 provinces qualify: Ha Noi, Dong Nai, Lam Dong, Hung Yen, Hai Phong, Nghe An",
-   "POS 58.9–59.3% vs 58.8% nationally; QR at par; small gaps in e-commerce and app",
-   "Customers differ 8.6pp within provinces vs 3.9pp across all 34 → target the customer, not the region"],
+  ["6 qualify (spend > median, digital < 41.2%): Dong Nai 40.7%, Hung Yen 40.8%, Hai Phong 40.8%, Ha Noi 40.9%, Lam Dong 41.1%, Nghe An 41.2%",
+   "Channel mix: POS 58.9–59.3% vs 58.8% nationally; QR at par; the gap sits in e-commerce and app",
+   "Customers differ 8.6pp within provinces vs 3.9pp across all 34 → target the customer, not the region",
+   "Top market HCMC: 13.6% of spend at 41.3% digital; lagging: Quang Ngai 39.2% digital"],
   SRC_T, "Qualifying = spend above the provincial median (> 82.7B VND) and digital (non-POS) share below the national 41.2%. Only 3 of 6 gaps are significant (p < 0.05). HCMC leads spend (13.6%) at 41.3% digital; range Cao Bang 43.1% to Quang Ngai 39.2%.");
 
 slideTwo(8, "Task 1 · EDA · Q4 & Q5", "Fuel is the everyday habit, groceries the biggest basket; age barely moves health",
   "deck_q4_categories", "deck_q5_cohorts",
   [["188,029", "Fuel & transport transactions — top by count, 1.59M VND ticket, 17 buys per buyer-month"],
-   ["2.92M", "VND ticket for in-store groceries — top by spend (513.8B), 1.8× the fuel ticket"],
-   ["65.8", "lowest FHS: 25–34, still active (178.7 txns/month) with the highest spend-to-income 0.716"]],
+   ["2.92M", "VND grocery ticket — top by spend (513.8B), 1.8× fuel. Lagging: travel (57,956 txns), online groceries (87.1B)"],
+   ["65.8", "lowest FHS: 25–34, active (178.7 txns/mo); spend/income 0.716 vs 0.700, essential 0.468 vs 0.481"]],
   SRC_T + "; cohorts: " + SRC_M,
   "Q4: fuel is a frequent top-up (96.8% of customers buy it), groceries a stock-up basket (99.3%). Q5: 25–34 is the only cohort above national spend-to-income (0.716 vs 0.700) and below the national essential ratio (0.468 vs 0.481) — overspending on wants. But the spread is 1.2 points, 95% CIs overlap and ANOVA p = 0.13: age is a weak lever.");
 
@@ -238,24 +239,24 @@ slideTwo(13, "Task 3 · Engagement · D1–D2", "Engagement is saturated; the wh
 slideTwo(14, "Task 3 · Engagement · D3–D4", "Breadth and regular activity — not recency — separate engaged customers",
   "deck_t3_diversity", "deck_t3_heatmap",
   [["2–14", "categories per month; r +0.81 with engagement even within full-year customers"],
-   ["r +0.80", "active days vs engagement — ahead of transaction count (+0.76) and recency (−0.58)"],
+   ["r +0.80", "active days (range 1–31, median 30) — ahead of count (+0.76) and recency (−0.58; range 0 to 30 days)"],
    ["≤ 55", "engagement whenever a customer is active on only 1–5 days, whatever the recency"]],
   SRC_M,
   "Ranges: recency 0–30 days (median 0), active days 1–31 (median 30), 2–713 transactions a month (median 150). r = +0.94 across all customers is partly two clusters; +0.81 within the 908 full-year base shows the link holds. Scatter for two continuous variables; heatmap for the recency × frequency interaction.");
 
 slideOne(15, "Task 3 · Engagement · D5", "25 healthy customers used their card on only 1–2 days all year",
   "deck_t3_cutoff", "25", "customers (2.5%): FHS ≥ 70 and engagement < 70",
-  ["The cutoff sits in an empty gap: 25 at any engagement cutoff from 60 to 70",
+  ["Cutoff 70 sits in an empty gap: 25 at any cutoff 60–70; looser (72.5 / 75) pulls in active users (39 / 63); stricter FHS ≥ 75 leaves 9",
    "Profile: 2 vs 27 active days, 10 vs 159 transactions a month, 61% vs 24% online",
    "19 silent since Jan–Jul → win back everyday use, not budgeting"],
   SRC_M, "FHS ≥ 70 = top 21% (p79); engagement < 70 is below the customer p10 (71.1). Looser cutoffs pull in active users (39 at 72.5, 63 at 75); FHS ≥ 65 gives 48, ≥ 75 gives 9. Also: age 61 vs 50, diversity 4.7 vs 13.1, spend/income 0.46 vs 0.70; 24 of 25 are Occasional Online-First. One month of data each: a watch-list, never used to limit credit.");
 
 // ============ TASK 4 ============
-slideOne(16, "Task 4 · Segmentation · Method", "Clustering 8 behavioural ratios yields four segments along three business axes",
-  "deck_t4_k", "k = 4", "k-means on 8 scaled ratios, 999 customers",
-  ["Inputs: health, activity and spending-mix ratios; no raw VND, no demographics",
+slideOne(16, "Task 4 · Segmentation · Method", "Clustering 8 behavioural features yields four segments along three business axes",
+  "deck_t4_k", "k = 4", "k-means on 8 z-scaled behavioural features, 999 customers",
+  ["Inputs: 4 ratios (spend/income, utilization, discretionary, online), spending volatility, FHS, engagement score, transactions/month; no raw VND, no demographics",
    "k = 2 splits one-off users, k = 3 adds health, k = 4 adds activity; k ≥ 5 only subdivides",
-   "Coverage 999 / 999 incl. 7 minors; dataset + dictionary in the ZIP"],
+   "Coverage 999 / 999 incl. 7 minors; preprocessed dataset task4_features.csv + dictionary in the ZIP"],
   SRC_K, "Preprocessing: 10,992 customer-months → 999 customers (yearly mean per ratio), 0 nulls. Features: FHS, spend/income, utilization, volatility, engagement, transactions, discretionary share, online share (z-scaled). Excluded: essential ratio (= 1 − discretionary); diversity, active days, recency (near-constant). Silhouette 0.25 = moderate separation, expected for behaviour.");
 
 (() => {
@@ -277,12 +278,12 @@ slideOne(16, "Task 4 · Segmentation · Method", "Clustering 8 behavioural ratio
   s.addNotes("The heatmap is the side-by-side comparison the brief asks for. Health splits Healthy from Stretched, activity isolates High-Activity (not more online: 21% vs 25% average; youngest, 60% female), and the Occasional group is defined by how rarely we see them (1.1 of 12 months). Suggested personas not formed: Essential-Spend-Focused = 4 customers; Healthy-but-Disengaged = 25, 24 of them Occasional.");
 })();
 
-slideOne(18, "Task 4 · Segmentation · Validation", "Segments are stable — and December hits every segment by ~13 points",
+slideOne(18, "Task 4 · Validation, limits & future work", "Segments are stable — and December hits every segment by ~13 points",
   "deck_t4_december", "0.99", "agreement across 20 random seeds (ARI, 1 = identical)",
-  ["Bootstrap ARI 0.91; the three full-year segments form a continuum",
-   "December cuts health 12.8–14.2 pts in every segment → reminders for everyone",
-   "Limits: synthetic folded data; 88 occasional users rest on ~1 month; never for lending"],
-  SRC_K, "Stability: 20 seeds ARI 0.988; 80% bootstrap × 50 ARI 0.911; dropping December 0.873. GMM agrees 0.26 (Occasional identical). 2×2 median cross-check agrees on health (344/351, 273/302). Segments correlate with age/gender (Cramér's V 0.23 age / 0.13 gender) → act on behaviour only. Future work: hybrid model (rule for part-year + k = 3), trajectory features, chronological early-warning on next_month_low_health_flag (support only).");
+  ["Bootstrap ARI 0.91; December cuts health 12.8–14.2 pts in every segment → reminders for all",
+   "Limits: synthetic folded data; 88 occasional users rest on ~1 month; full-year segments form a continuum (silhouette 0.25); segments lean on age / gender (Cramér's V 0.23 / 0.13) → act on behaviour only",
+   "Future work: hybrid rules + k-means, month-to-month trajectory features, chronological early-warning on next_month_low_health_flag (support only)"],
+  SRC_K, "Stability: 20 seeds ARI 0.988; 80% bootstrap × 50 ARI 0.911; dropping December 0.873. GMM agrees 0.26 (Occasional identical). 2×2 median cross-check agrees on health (344/351, 273/302). Future work detail: hybrid model (rule for part-year customers + k = 3 on the full-year base), trajectory features (slope, December dip), chronological early-warning on next_month_low_health_flag trained Jan–Aug, validated Sep–Oct, tested Nov (support only).", { bigSize: 36, fs: 10.5 });
 
 // ============ TASK 5 ============
 (() => {
@@ -293,13 +294,13 @@ slideOne(18, "Task 4 · Segmentation · Validation", "Segments are stable — an
     ["① Budgeting", "Stretched & Engaged · 302 (30.2%)", "spend/income 0.84; r −0.90 with FHS", "Spend-vs-income view, self-set budget", "spend/income; stress months"],
     ["② Spend alerts", "Crossover · 43 (4.3%)", "52% of stress months; late-night spend", "Opt-in pacing alert before 22:00", "stress months / customer"],
     ["③ Planning reminders", "High-Activity · 258 (25.8%)", "volatility 1.91; December −13 pts", "Year-end plan sent in November", "Dec drop vs holdout"],
-    ["④ Education", "Low health & engagement · 67 (6.7%)", "86% discretionary vs 55% base", "Needs-vs-wants micro-modules", "essential share"],
+    ["④ Education", "FHS < 70 & engagement < 70 (yearly means) · 67 (6.7%)", "86% discretionary vs 55% base", "Needs-vs-wants micro-modules", "essential share"],
     ["⑤ Digital nudges", "Occasional Online-First · 88 (8.8%)", "1–2 active days; 60.6% via app/e-com", "Habit nudges in their app", "active days"],
-    ["⑥ Product suggestions", "Healthy & Engaged · 351 (35.1%), adults", "lowest utilization 0.15; FHS 70.5", "Opt-in savings/loyalty, no credit increase", "opt-in uptake"]];
+    ["⑥ Product suggestions", "Healthy & Engaged, adults 18+ · 350 (35.0%)", "lowest utilization 0.15; FHS 70.5", "Opt-in savings/loyalty, no credit increase", "opt-in uptake"]];
   const body = rows.map((r, i) => i === 0 ? r : r.map((c) => ({ text: c, options: { fill: { color: i % 2 ? WHITE : PALE } } })));
   s.addTable(body, { x: 0.6, y: 1.75, w: 12.13, colW: [1.95, 2.85, 2.85, 2.7, 1.78], fontFace: FONT, fontSize: 11, color: INK,
     border: { type: "solid", pt: 0.5, color: "D5E2F2" }, valign: "middle", rowH: 0.62, margin: 0.06 });
-  T(s, "Segments ① ③ ⑤ ⑥ cover all 999 customers. Overlays: alerts 43 = 39 Stretched + 4 Healthy; education 67 = 64 Occasional + 3 Stretched (sequenced, never in the same week).",
+  T(s, "Segments ① ③ ⑤ ⑥ cover all 999 customers (1 minor in Healthy & Engaged gets no product offer). Overlays: alerts 43 = 39 Stretched + 4 Healthy; education 67 = 64 Occasional + 3 Stretched (sequenced, never in the same week).",
     { x: 0.6, y: 6.25, w: 12.13, h: 0.55, fontSize: 11, italic: true, color: BLUE });
   footer(s, 19, SRC_K + "; " + SRC_M + "; " + SRC_T);
   s.addNotes("One tool per required type, each with an exact size, the column it rests on and a KPI. Every tool is opt-in and behaviour-triggered.");
@@ -308,18 +309,18 @@ slideOne(18, "Task 4 · Segmentation · Validation", "Segments are stable — an
 (() => {
   const s = slideOne(20, "Task 5 · Prioritisation", "Budgeting leads on reach × driver strength; alerts launch first for precision",
     "deck_t5_priority", "271", "priority score of the budgeting tool (302 × 0.90)",
-    ["Score = reach × |r| of the trigger with its outcome; wellbeing before growth",
+    ["Reach × |r|: a ranking heuristic, not an impact estimate; wellbeing first",
      "Alerts reach only 43 customers but 71% of stress months → wave 1",
      "Fairness: behaviour-only triggers; uptake tracked by age & gender; no offers to minors"],
     SRC_M + "; " + SRC_K, "Wellbeing: Budgeting 271 → Reminders 128 → Alerts 37 → Education 32. Growth: Products 74 → Nudges 52. Targets skew (Reminders 60.5% female; Education/Nudges mean age ~58), so we monitor uptake by group rather than target by it.",
-    { h: 3.55 });
+    { h: 3.55, fs: 11 });
   s.addShape(p.ShapeType.roundRect, { x: 9.05, y: 5.45, w: 3.68, h: 1.25, rectRadius: 0.1, fill: { color: NAVY }, line: { color: NAVY } });
   T(s, "NEVER", { x: 9.3, y: 5.5, w: 3.2, h: 0.5, fontSize: 22, bold: true, color: WHITE });
   T(s, "financial_health_score → deny credit, cut a limit, raise a rate or block an account", { x: 9.3, y: 5.98, w: 3.25, h: 0.65, fontSize: 10.5, color: ICE, valign: "top" });
 })();
 
-slideOne(21, "Task 5 · Impact", "A 10% spend trim could cut stress months by 28–32%, tested within 90 days",
-  "deck_t5_scenario", "−28–32%", "stress months if the Stretched 302 trim spend-to-income by 10%",
+slideOne(21, "Task 5 · Impact", "What-if: a 10% spend trim would cut stress months by 28–32% — to be tested in a 90-day pilot",
+  "deck_t5_scenario", "−28–32%", "stress months if the Stretched 302 trim spend-to-income by 10% (simulated, not measured)",
   ["What-if on FHS = 84.1 − 25.3 × spend/income; part of the gain is mechanical",
    "Roadmap: 0–30 d budgeting + alerts · 31–60 d November reminders + nudges · 61–90 d education + products",
    "Every tool vs a random 10% holdout for 3 months; scale only what wins"],
@@ -334,7 +335,7 @@ slideOne(21, "Task 5 · Impact", "A 10% spend trim could cut stress months by 28
     { x: 0.8, y: 1.3, w: 11.7, h: 1.6, fontSize: 28, bold: true, color: WHITE });
   const cols = [["Why", "Overspending drives poor health (r −0.90); under stress 71.6% of spend is discretionary, and stress peaks in December."],
     ["Who", "4 stable segments cover all 999 customers; 43 active customers hold 52% of stress months."],
-    ["What", "Budgeting for 302 and opt-in evening alerts first, each measured against a random holdout within 90 days."]];
+    ["What", "Budgeting for 302 and opt-in evening alerts first, each to be measured against a random holdout in a 90-day pilot."]];
   cols.forEach((c, i) => {
     const x = 0.8 + i * 3.97;
     s.addShape(p.ShapeType.roundRect, { x, y: 3.35, w: 3.75, h: 2.45, rectRadius: 0.08, fill: { color: "13345E" }, line: { color: "13345E" } });
