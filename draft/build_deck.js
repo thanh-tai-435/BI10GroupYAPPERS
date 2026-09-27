@@ -260,7 +260,7 @@ contentOne(++N, "Task 2 · Financial Health · D1", "Nobody is stressed on avera
 contentTwo(++N, "Task 2 · Financial Health · D2", "Low health is overspending: it breaks once spend passes income",
   ["One factor dominates (month grain, n = 10,992): spend-to-income r −0.90 and credit utilization r −0.86 move together (r 0.90) and jointly explain 82% of FHS variance; the link also holds within each consumer (r −0.90).",
    "Threshold: 98% of stressed months spend more than income; in the top spend-to-income quintile (avg 1.21) 93% of months fall below 60, and none do in the bottom two quintiles.",
-   "What they buy (transactions): stressed months are 72% discretionary by value vs 40% in healthy months, with 2× the e-commerce + app share (23% vs 12%). They are also MORE engaged (81.1 vs 72.7). Shared inputs → directional, not causal."],
+   "What they buy (transactions): stressed months are 71.6% discretionary by value vs 40.5% in healthy months, with 2× the e-commerce + app share (23% vs 12%). They are also MORE engaged (81.1 vs 72.7). Shared inputs → directional, not causal."],
   "v2_t2_sti_threshold.png", "t2_low_health_drivers.png",
   { src: M + " Category mix: " + J,
     note: "The two headline ratios are one story: spending relative to capacity. The practical line is spend-to-income above 1, which almost every stressed month crosses. The transaction file shows the extra spend is discretionary and online, which tells a budgeting tool what to watch." });
