@@ -43,7 +43,7 @@ Each task in `draft/`: `taskN*.py` (analysis) + `taskN_output.txt` (captured run
 - **Deep-dives** `taskN_deep.py` (+ `taskN_deep_output.txt`): each runs its base script then extra analysis; its `## CELL` blocks are the notebook cells. New charts: t1_province_channel, t1_discretionary_gradient, t2_demographics, t2_timing, t2_sti_quintile, t3_segment_share, t3_diversity_hist, t3_recency_frequency, t4_pca, t5_impact_scenario. Task 4 also writes `data_dictionary_task4.md`.
 - `make_charts.py` → the original 16 PNGs in `outputs/figures/` (t1_*..t5_*).
 - `slide_outline.md` → original 18-slide plan (header notes the 4 added slides).
-- `build_deck.js` → **`draft/YAPPERS_BI10_R01.pptx`** (**22 slides**, auto-numbered, QA'd 27/09).
+- `build_deck.js` → **`draft/YAPPERS_BI10_R01.pptx`** (22 slides, blue/white consulting layout, validated with the pptx skill). **All deck charts = `outputs/figures/deck_*.png` produced by the appendix of `notebooks/full_pipeline.ipynb`**; every number on the slides is printed by the notebook (see its "Supporting numbers" cell). The v2_* charts in draft/review are no longer used.
 - Team guide: `draft/YAPPERS_huong_dan_Colab.xlsx` (per-person sheets, statuses).
 
 ## Key findings (the spine) — revised 28/09 after 6-agent review (draft/review/review_*.md)
@@ -63,7 +63,7 @@ Deck (`draft/build_deck.js`) + submission notebook are the source of truth; `dra
 PYTHONUTF8=1 py draft/task1_eda.py     # (task2..task5 likewise)
 PYTHONUTF8=1 py draft/task1_deep.py   # (task2..task5_deep likewise; task2_deep reads task1_age_ci.csv if present)
 PYTHONUTF8=1 py draft/make_charts.py   # charts
-for f in draft/review/t*_charts_v2.py; do PYTHONUTF8=1 py $f; done   # v2_* charts used by the deck
+# run notebooks/full_pipeline.ipynb (writes outputs/figures/deck_*.png) before building the deck
 node draft/build_deck.js               # deck -> draft/YAPPERS_BI10_R01.pptx
 ```
 
