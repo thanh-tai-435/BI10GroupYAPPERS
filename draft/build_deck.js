@@ -255,13 +255,6 @@ contentTwo(++N, "Task 1 · EDA · Q2 — the spine", "Financial stress flips the
   "t1_essential_discretionary.png", "t1_discretionary_gradient.png",
   { note: "THE slide — the gradient proves the inversion is real, not an artefact of the 40/80 cutoffs." });
 
-contentTwo(++N, "Task 1 · EDA · Q4 & Q5", "Categories: habit vs basket. Age: active 25–34 is weakest — barely",
-  ["Q4 — top by COUNT: Fuel & Transport, 188,029 transactions, avg ticket 1.59M VND (bought by 96.8% of consumers, 17.3 times per buyer-month). Top by SPEND: in-store Groceries, 513.8B VND, avg ticket 2.92M VND (1.8×) — frequent top-ups vs stock-up baskets.",
-   "Q5 — 25–34 is active (178.7 transactions/month, above the cohort median 177.8) with the lowest FHS 65.8 (best 67.0). Drivers: highest spend-to-income 0.716 (national 0.700) with a below-average essential ratio 0.468 (national 0.481) → overspend on wants.",
-   "But bootstrap 95% CIs of all six cohorts overlap (65.8–67.0): age is a weak differentiator — target the ratios, not birth year."],
-  "t1_category_ticket.png", "t1_age_cohort.png",
-  { src: ST + " Age cohorts: consumer-month file.", note: "Answer Q4 and Q5 exactly as asked, then show the honest limit (CI overlap)." });
-
 contentOne(++N, "Task 1 · EDA · Q3", "No regional digital divide: high-spend provinces mirror the nation",
   ["5 provinces with above-median spend but below-average digital share: Ha Noi, Dong Nai, Lam Dong, Hung Yen, Hai Phong.",
    "Channel breakdown (share of transactions): POS 58.9–59.3% vs 58.8% nationally · QR ~19.8–20.1% · E-commerce ~8.5% · Mobile ~7.5% · Recurring ~5%.",
@@ -271,6 +264,13 @@ contentOne(++N, "Task 1 · EDA · Q3", "No regional digital divide: high-spend p
   "t1_province_channel.png",
   { src: ST, stat: ["≤ 0.46pp", "largest digital-share gap vs national"],
     note: "Q3 asked for the channel breakdown — every hub has the national mix." });
+
+contentTwo(++N, "Task 1 · EDA · Q4 & Q5", "Categories: habit vs basket. Age: active 25–34 is weakest — barely",
+  ["Q4 — top by COUNT: Fuel & Transport, 188,029 transactions, avg ticket 1.59M VND (bought by 96.8% of consumers, 17.3 times per buyer-month). Top by SPEND: in-store Groceries, 513.8B VND, avg ticket 2.92M VND (1.8×) — frequent top-ups vs stock-up baskets.",
+   "Q5 — 25–34 is active (178.7 transactions/month, above the cohort median 177.8) with the lowest FHS 65.8 (best 67.0). Drivers: highest spend-to-income 0.716 (national 0.700) with a below-average essential ratio 0.468 (national 0.481) → overspend on wants.",
+   "But bootstrap 95% CIs of all six cohorts overlap (65.8–67.0): age is a weak differentiator — target the ratios, not birth year."],
+  "t1_category_ticket.png", "t1_age_cohort.png",
+  { src: ST + " Age cohorts: consumer-month file.", note: "Answer Q4 and Q5 exactly as asked, then show the honest limit (CI overlap)." });
 
 contentOne(++N, "Task 2 · Financial Health · D1", "Health is a tight band; distress is episodic, never chronic",
   ["Consumer level (n = 999): mean 66.3, median 66.2, std 4.7, IQR 63.4–69.3, range 42.3–80.8, skew −0.32 (mild low tail).",
@@ -287,19 +287,19 @@ contentTwo(++N, "Task 2 · Financial Health · D2", "Low health is an overspend 
   "t2_low_health_drivers.png", "t2_sti_quintile.png",
   { note: "Two ratios are the whole game — the quintile chart makes r = −0.90 tangible." });
 
-contentTwo(++N, "Task 2 · Financial Health · D4", "The \"Stressed but Engaged\" crossover — and when to reach it",
-  ["Reproducible rule (consumer-month): financial_health_score < 40 AND engagement_score ≥ p75 (81.4) → 43 consumers / 49 months = 52% of ALL stress episodes. Robust: p70 / p80 give 44 / 41 consumers (53% / 48%).",
-   "Profile: spend/income 1.89, credit-utilization 0.55, online share 0.49 (2× national) — active, digital, over-extended.",
-   "Timing (transactions): stressed months put 23.5% of spend value into 22–23h vs 8.3% (bigger late tickets, not more: count 11.6% vs 9.7%); Sunday + Monday = 42% vs 34% → alerts Sun–Mon evenings, before 22:00."],
-  "t2_crossover.png", "t2_timing.png",
-  { src: SM + " Timing: " + SMT, note: "More than half of every stress episode happens to someone we can reach in-app — and we know when." });
-
 contentWide(++N, "Task 2 · Financial Health · D3", "Who differs? Province and age barely; occupation through spending",
   ["Province: 22 of 27 provinces (≥ 15 consumers) have a 95% CI containing the national mean 66.3 (extremes Thai Nguyen 63.0, HCMC 67.6). Age: all six cohort CIs overlap (65.8–67.0).",
    "Occupation (396 raw titles → 8 keyword groups): Engineering/science/IT 69.1 (n = 229), Business/finance 68.7 (126) vs Office/public 64.5 (443), Manual/trades 62.9 (23) — a ~6-pt spread that mirrors spend-to-income (0.60 vs 0.76–0.79).",
    "Demographics act through the overspend ratio → target the ratio, never the group (fairness)."],
   "t2_demographics.png",
   { note: "Deliverable 3 — the one demographic gap is really a spending gap." });
+
+contentTwo(++N, "Task 2 · Financial Health · D4", "The \"Stressed but Engaged\" crossover — and when to reach it",
+  ["Reproducible rule (consumer-month): financial_health_score < 40 AND engagement_score ≥ p75 (81.4) → 43 consumers / 49 months = 52% of ALL stress episodes. Robust: p70 / p80 give 44 / 41 consumers (53% / 48%).",
+   "Profile: spend/income 1.89, credit-utilization 0.55, online share 0.49 (2× national) — active, digital, over-extended.",
+   "Timing (transactions): stressed months put 23.5% of spend value into 22–23h vs 8.3% (bigger late tickets, not more: count 11.6% vs 9.7%); Sunday + Monday = 42% vs 34% → alerts Sun–Mon evenings, before 22:00."],
+  "t2_crossover.png", "t2_timing.png",
+  { src: SM + " Timing: " + SMT, note: "More than half of every stress episode happens to someone we can reach in-app — and we know when." });
 
 contentThree(++N, "Task 3 · Engagement · D1–D2", "Engagement is saturated; channels are POS-first",
   ["D1: engagement_score mean 77.8, median 78.1, IQR 74.8–81.4 (consumer-month). Consumers by segment: Low 1.0% (10) · Medium 8.0% (80) · High 74.1% (740) · Very high 16.9% (169) → the score alone does not segment the base.",

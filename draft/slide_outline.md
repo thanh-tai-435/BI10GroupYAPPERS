@@ -2,7 +2,7 @@
 
 *16:9 · English · 18 slides (max 22) · Charts referenced by filename from `outputs/figures/`.*
 
-> **Update 27/09 — deck is now 22 slides; `draft/build_deck.js` is the source of truth for slide text.** Four slides added: **8** Task 1 Q3 channel breakdown by province (`t1_province_channel.png`) · **12** Task 2 differences by province / occupation / age (`t2_demographics.png`) · **18** Task 4 validation & monthly migration (`t4_pca.png`) · **21** Task 5 impact, KPIs & 90-day roadmap (`t5_impact_scenario.png`). Slides 6, 7, 10, 11, 13, 14 gained a second chart from the deep-dives (`draft/taskN_deep.py`). Numbering below is the original 18-slide plan.
+> **Update 27/09 — deck is now 22 slides; `draft/build_deck.js` is the source of truth for slide text.** Four slides added: **7** Task 1 Q3 channel breakdown by province (`t1_province_channel.png`) · **11** Task 2 differences by province / occupation / age (`t2_demographics.png`) · **18** Task 4 validation & monthly migration (`t4_pca.png`) · **21** Task 5 impact, KPIs & 90-day roadmap (`t5_impact_scenario.png`). Slides 6, 7, 10, 11, 13, 14 gained a second chart from the deep-dives (`draft/taskN_deep.py`). Slides follow the brief's question order (Task 1 Q1→Q5, Task 2 D1→D4). Numbering below is the original 18-slide plan.
 *Spine of the narrative: Q2's essential↔discretionary inversion + episodic stress → segmentation → the 6-tool plan.*
 *Required 04 sections present: (1) Executive Summary = slide 2, (2) Table of Contents = slide 3, (3) Introduction to the Case = slide 4, (4) Analysis Results Tasks 1–5 = slides 5–17.*
 
