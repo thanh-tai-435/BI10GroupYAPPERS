@@ -32,7 +32,7 @@ DeBai.md              cleaned brief
 CLAUDE.md             this file
 draft/                all analysis (see below) — the working area
 outputs/figures/      chart PNGs (git-ignored): make_charts.py + taskN_deep.py
-notebooks/            Colab notebooks, one per person P1–P5 (setup cell downloads data from public Drive links; cells generated from draft/taskN_deep.py)
+notebooks/            full_pipeline.ipynb = SUBMISSION notebook (English, self-contained code, no GitHub token, downloads data from public Drive; saved with outputs). task*_*.ipynb = team working notebooks P1–P5 (need GH_TOKEN; cells generated from draft/taskN_deep.py)
 BI10_ROUND01_DATASET/ raw data (git-ignored)
 ```
 `.gitignore` excludes data, PDFs, all `*.csv`/`*.parquet*`, outputs, `node_modules`. Scripts + findings + outline ARE tracked.
