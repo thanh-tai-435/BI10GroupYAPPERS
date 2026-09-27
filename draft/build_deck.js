@@ -266,6 +266,7 @@ contentOne(++N, "Task 1 · EDA · Q3", "No regional digital divide: high-spend p
   ["5 provinces with above-median spend but below-average digital share: Ha Noi, Dong Nai, Lam Dong, Hung Yen, Hai Phong.",
    "Channel breakdown (share of transactions): POS 58.9–59.3% vs 58.8% nationally · QR ~19.8–20.1% · E-commerce ~8.5% · Mobile ~7.5% · Recurring ~5%.",
    "Largest digital gap: −0.46pp (Dong Nai); digital share of value 40.9–41.5% vs 41.5% nationally.",
+   "Top performers: HCMC leads spend (13.6% of the national total) at 41.3% digital; highest digital share Cao Bang 43.1% (0.5% of spend), lowest Quang Ngai 39.2% — all 34 provinces sit within 3.9pp.",
    "The gap is statistically real but commercially negligible → province is not a lever for digital adoption; behaviour is."],
   "t1_province_channel.png",
   { src: ST, stat: ["≤ 0.46pp", "largest digital-share gap vs national"],
