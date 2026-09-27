@@ -78,7 +78,7 @@ Global means for reference: FHS 66.3 · spend/income 0.693 · credit-util 0.190 
 - **Feature selection is a judgement call.** We dropped near-constant columns and one collinear ratio; a different set (e.g. keeping category_diversity) would shift boundaries slightly.
 
 **Operational / data.**
-- **Synthetic, single-year (2025) data** with a uniform synthetic December uplift (Task 1) — segment *sizes* are directionally real, not a production census.
+- **Synthetic, single-year (2025) data** with two source years folded onto 2025 (case study §12), which inflates monthly volume — segment *sizes* are directionally real, not a production census.
 - **Engagement is skewed high** (mean 75.4, mostly 74–81); the Emerging-Digital tail (engagement 49.6) is real but small, so that segment is the least statistically robust (n=88).
 - Segments are **not credit-risk tiers** and must not be used for lending decisions — this is a wellbeing lens.
 

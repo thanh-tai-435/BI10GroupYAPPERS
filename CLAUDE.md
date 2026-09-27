@@ -52,7 +52,7 @@ Each task in `draft/`: `taskN*.py` (analysis) + `taskN_output.txt` (captured run
 - **Stress is episodic:** 0/999 chronically stressed; crossover (FHS<40 & engagement≥p75 81.4) = 43 consumers = 52% of all stress episodes.
 - **Weak levers:** geography (max digital gap 0.46pp) and age (all cohort CIs overlap). Occupation spreads ~6 FHS pts but tracks spend-to-income — target ratios, not demographics.
 - **Timing:** stressed months put 23.5% of spend value into 22–23h (vs 8.3%; bigger tickets, not more); Sun+Mon 42%. Healthy→Stretched slide = 72.4% Nov→Dec.
-- **No 'two years folded' caveat** — all timestamps are 2025; December uplift is uniform across 14 categories. Non-POS = 41% of trips AND of value (the old '21% of spend' mixed in online_spend_ratio).
+- **Two-years-folded caveat is REAL** (case study §12: two source years folded onto 2025, timestamps re-dated so all read 2025; inflates monthly volume). Dec uplift is uniform across 14 categories. Non-POS = 41% of trips AND of value (the old '21% of spend' mixed in online_spend_ratio).
 - **4 segments** (k-means k=4, silhouette 0.251, seed ARI 0.988, bootstrap ARI 0.911, 999/999 covered; correlate with age/gender p<0.01): Healthy&Engaged 351 / Stretched&Engaged 302 / Digital Power Users 258 / Emerging Digital 88.
 - **6-tool plan** priority: Budgeting(302) → Alerts(43) → Reminders(258) → Products(351) → Nudges(88) → Education(67).
 

@@ -49,7 +49,7 @@
 - Decomposed: transaction **count +187%** peak-vs-trough, while **avg ticket falls 2.6%** (1.74M vs 1.79M).
 - Consumers buy *more often*, not *pricier* — year-end / Tết-prep bunching.
 - Implication: scale capacity, fraud monitoring and campaigns to transaction **volume**, not basket value.
-- *Caveat: December's uplift is uniform across all 14 categories (+181–193%) — a synthetic seasonal multiplier; treat 15% as directional.*
+- *Caveat: two source years folded onto 2025 (case §12) inflate monthly volume; the Dec uplift is uniform across 14 categories — treat 15% as directional.*
 - Charts: **t1_monthly_spend.png**.
 - Speaker note: Peaks are a frequency phenomenon — the lever is trip frequency, not upsell.
 

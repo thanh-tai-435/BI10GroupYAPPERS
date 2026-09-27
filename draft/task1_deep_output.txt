@@ -141,7 +141,7 @@ Spearman(FHS, discretionary_spend_ratio) month grain: -0.474
 saved t1_discretionary_gradient.png
 
 ==============================================================================
-DEEP Q1 - Which categories drive the December peak? + 2-year fold check
+DEEP Q1 - Which categories drive the December peak? + timestamp-year check
 ==============================================================================
 Dec - Feb transaction count, total increase 182,941:
                                   increase  share_of_increase_%  growth_%
@@ -191,3 +191,23 @@ All CIs overlap: True (max lower 66.35 vs min upper 66.43)
 Slide 4 dataset check
 ==============================================================================
 consumer-months 10,992 | consumers 999 | transactions 1,852,394 | min age 15 | minors 7
+
+==============================================================================
+Data quality & rigour (rubric 15%) - checks on both files
+==============================================================================
+        0  missing cells (transactions)
+        0  missing cells (monthly)
+      999  next_month_low_health_flag missing (Dec has no label, by design)
+        0  duplicate transaction_id
+        0  duplicate consumer-month rows
+        0  negative spend_amount_vnd
+        0  timestamps outside 2025
+        0  consumers with >1 name or birth date
+        0  merchants with >1 name
+        0  consumer_id in one file but not the other
+        0  consumer-months where txn sum != total_spend_vnd
+        5  ratio values outside [0, 1]
+        0  essential + discretionary ratio != 1 (|diff| > 0.001)
+
+Coverage: 999 consumers · 693 merchants · 34 provinces · 1-12 months per consumer (10,992 of 11,988 possible consumer-months present)
+spend > p99.9 (37.9M VND): 1,853 txns — kept (valid, ratios absorb scale)

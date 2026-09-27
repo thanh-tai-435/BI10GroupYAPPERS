@@ -122,3 +122,34 @@ h("Slide 4 dataset check")
 print(f"consumer-months {len(mon):,} | consumers {mon.consumer_id.nunique()} | transactions {len(txn):,} | "
       f"min age {mon.age.min()} | minors {mon.loc[mon.age < 18].consumer_id.nunique()}")
 assert (len(mon), mon.consumer_id.nunique(), len(txn)) == (10992, 999, 1852394)
+
+## CELL 8
+h("Data quality & rigour (rubric 15%) - checks on both files")
+dq = pd.read_csv(TXN, usecols=["transaction_id", "consumer_id", "customer_name", "date_of_birth", "merchant_id", "merchant_name",
+                               "activity_datetime", "spend_amount_vnd", "province_city", "transaction_month"])
+ts = pd.to_datetime(dq.activity_datetime)
+recon = dq.groupby(["consumer_id", "transaction_month"]).spend_amount_vnd.sum().rename("tx_sum").reset_index()
+recon = recon.merge(mon[["consumer_id", "month", "total_spend_vnd"]], left_on=["consumer_id", "transaction_month"],
+                    right_on=["consumer_id", "month"], how="outer")
+ratio_cols = ["essential_spend_ratio", "discretionary_spend_ratio", "online_spend_ratio", "credit_utilization_ratio"]
+checks = {
+    "missing cells (transactions)": int(dq.isna().sum().sum()),
+    "missing cells (monthly)": int(mon.drop(columns=["next_month_low_health_flag"]).isna().sum().sum()),
+    "next_month_low_health_flag missing (Dec has no label, by design)": int(mon.next_month_low_health_flag.isna().sum()),
+    "duplicate transaction_id": int(dq.transaction_id.duplicated().sum()),
+    "duplicate consumer-month rows": int(mon.duplicated(["consumer_id", "month"]).sum()),
+    "negative spend_amount_vnd": int((dq.spend_amount_vnd < 0).sum()),
+    "timestamps outside 2025": int((ts.dt.year != 2025).sum()),
+    "consumers with >1 name or birth date": int((dq.groupby("consumer_id")[["customer_name", "date_of_birth"]].nunique() > 1).any(axis=1).sum()),
+    "merchants with >1 name": int((dq.groupby("merchant_id").merchant_name.nunique() > 1).sum()),
+    "consumer_id in one file but not the other": len(set(dq.consumer_id) ^ set(mon.consumer_id)),
+    "consumer-months where txn sum != total_spend_vnd": int((recon.tx_sum.fillna(-1) != recon.total_spend_vnd.fillna(-2)).sum()),
+    "ratio values outside [0, 1] (all = credit_utilization 1.03-1.5: over-limit months, FHS < 35, kept)": int(sum(((mon[c] < 0) | (mon[c] > 1)).sum() for c in ratio_cols)),
+    "essential + discretionary ratio != 1 (|diff| > 0.001)": int(((mon.essential_spend_ratio + mon.discretionary_spend_ratio - 1).abs() > .001).sum()),
+}
+for k, v in checks.items():
+    print(f"  {v:>7,}  {k}")
+print(f"\nCoverage: {dq.consumer_id.nunique()} consumers · {dq.merchant_id.nunique()} merchants · {dq.province_city.nunique()} provinces · "
+      f"{mon.groupby('consumer_id').size().min()}-{mon.groupby('consumer_id').size().max()} months per consumer "
+      f"({len(mon):,} of {999*12:,} possible consumer-months present)")
+print(f"spend > p99.9 ({dq.spend_amount_vnd.quantile(.999)/1e6:.1f}M VND): {int((dq.spend_amount_vnd > dq.spend_amount_vnd.quantile(.999)).sum()):,} txns — kept (valid, ratios absorb scale)")

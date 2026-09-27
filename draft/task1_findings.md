@@ -17,7 +17,7 @@
 December alone is **~1 in every 6.6 VND spent all year** and is **2.8× the trough month**. The decomposition is unambiguous: transaction **count is +187%** peak-vs-trough while **ticket size actually falls 2.6%**. Customers don't buy *pricier* things in December — they buy *more often* (year-end/Tết-prep bunching).
 
 **BI insight:** Peak demand is a frequency phenomenon. Capacity, fraud monitoring, and engagement campaigns should scale to transaction *volume*, not basket value. The lever to grow peak revenue is trip frequency and channel availability, not upsell.
-*Caveat: all 1,852,394 timestamps are in 2025, and December's uplift is uniform across all 14 categories (+181% to +193%) — it looks like a synthetic seasonal multiplier, so treat the 15% as directional, not a forecast.*
+*Caveat (case study §12): two source years were folded onto 2025 — timestamps were re-dated (all read 2025) but monthly volume is inflated. December's uplift is uniform across all 14 categories (+181% to +193%), so treat the 15% as directional, not a forecast.*
 
 ---
 
@@ -93,6 +93,6 @@ Among cohorts with above-median activity, **25–34 records the lowest financial
 
 - **Q3 channel breakdown (new slide).** The five high-spend, below-average-digital provinces (Ha Noi, Dong Nai, Lam Dong, Hung Yen, Hai Phong) have POS 58.9–59.3% of transactions vs 58.8% nationally; QR 19.7–20.1%, E-com 8.4–8.7%, Mobile 7.4–7.6%, Recurring 4.8–5.1%. Largest digital gap is **−0.46pp** (Dong Nai); digital *value* share 40.9–41.5% vs 41.5%. The "gap" is statistically real but commercially negligible — geography is not a lever. Chart: `t1_province_channel.png`.
 - **Q2 is a gradient, not a threshold artefact.** Discretionary share by FHS band: **71.6% (<40) → 64.2 (40s) → 57.3 (50s) → 54.4 (60s) → 49.2 (70s) → 40.6% (80s)**. Every cutoff pair keeps the direction (FHS<35 vs ≥85: 73.5% vs 30.2%; <50 vs ≥70: 65.4% vs 48.7%); Spearman −0.47 at month grain. Chart: `t1_discretionary_gradient.png`.
-- **Q1 December driver.** Dec − Feb adds 182,941 transactions, spread across **all 14 categories at +181% to +193%** — no category leads (largest contributor Fuel & Transport 10.2% of the increase). All timestamps are 2025, so the earlier "two years folded" caveat is withdrawn; the uniform uplift reads as a synthetic seasonal multiplier.
+- **Q1 December driver.** Dec − Feb adds 182,941 transactions, spread across **all 14 categories at +181% to +193%** — no category leads (largest contributor Fuel & Transport 10.2% of the increase). All timestamps read 2025 because the case folded two source years onto 2025 (case study §12), which inflates monthly volume — the caveat stands; treat the December magnitude as directional.
 - **Q4 reach.** Fuel & Transport is bought by **96.8%** of consumers (17.3 purchases per buyer-month, 11.2 months/yr); in-store Groceries by **99.3%** (16.1 per buyer-month) — both are near-universal habits.
 - **Q5 age is not a differentiator.** Bootstrap 95% CIs of mean FHS overlap for all six cohorts (65.75–66.97; max lower bound 66.35 < min upper bound 66.43). 25–34 is lowest in point estimate only. CI table: `draft/task1_age_ci.csv`.
