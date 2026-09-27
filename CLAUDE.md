@@ -31,8 +31,8 @@ Link the two on `consumer_id`. 999 consumers, min age **15** (7 minors aged 15�
 DeBai.md              cleaned brief
 CLAUDE.md             this file
 draft/                all analysis (see below) — the working area
-outputs/figures/      16 chart PNGs (git-ignored, regen via draft/make_charts.py)
-notebooks/            empty per-task notebooks (unused; work went into draft/*.py)
+outputs/figures/      chart PNGs (git-ignored): make_charts.py + taskN_deep.py
+notebooks/            Colab notebooks, one per person P1–P5 (setup cell downloads data from public Drive links; cells generated from draft/taskN_deep.py)
 BI10_ROUND01_DATASET/ raw data (git-ignored)
 ```
 `.gitignore` excludes data, PDFs, all `*.csv`/`*.parquet*`, outputs, `node_modules`. Scripts + findings + outline ARE tracked.
@@ -40,21 +40,26 @@ BI10_ROUND01_DATASET/ raw data (git-ignored)
 ## What's done (all 5 tasks + deck)
 Each task in `draft/`: `taskN*.py` (analysis) + `taskN_output.txt` (captured run) + `taskN_findings.md` (senior-BI write-up). Every script was actually run; numbers reproduce.
 - **task1_eda** — EDA Q1–Q5. **task2** — financial health. **task3** — engagement. **task4** — segmentation (+ `task4_features.csv`, per-consumer segment labels, git-ignored). **task5** — recommendations.
-- `make_charts.py` → 16 PNGs in `outputs/figures/` (t1_*..t5_*).
-- `slide_outline.md` → 18-slide plan.
-- `build_deck.js` → **`draft/YAPPERS_BI10_R01.pptx`** (18 slides, validated, QA'd).
+- **Deep-dives** `taskN_deep.py` (+ `taskN_deep_output.txt`): each runs its base script then extra analysis; its `## CELL` blocks are the notebook cells. New charts: t1_province_channel, t1_discretionary_gradient, t2_demographics, t2_timing, t2_sti_quintile, t3_segment_share, t3_diversity_hist, t3_recency_frequency, t4_pca, t5_impact_scenario. Task 4 also writes `data_dictionary_task4.md`.
+- `make_charts.py` → the original 16 PNGs in `outputs/figures/` (t1_*..t5_*).
+- `slide_outline.md` → original 18-slide plan (header notes the 4 added slides).
+- `build_deck.js` → **`draft/YAPPERS_BI10_R01.pptx`** (**22 slides**, auto-numbered, QA'd 27/09).
+- Team guide: `draft/YAPPERS_huong_dan_Colab.xlsx` (per-person sheets, statuses).
 
 ## Key findings (the spine)
 - **Overspend drives low health:** spend-to-income r −0.90, credit-utilization r −0.86. Not low income.
 - **Budget inverts under stress:** stressed (FHS<40) = 72% discretionary vs healthy (FHS≥80) = 40%. Strongest signal.
 - **Stress is episodic:** 0/999 chronically stressed; crossover (FHS<40 & engagement≥p75 81.4) = 43 consumers = 52% of all stress episodes.
-- **Weak levers:** geography (all provinces ~41% digital) and age (FHS 65.8–67.0) — target behavioural ratios, not demographics.
-- **4 segments** (k-means k=4, silhouette 0.251, 999/999 covered): Healthy&Engaged 351 / Stretched&Engaged 302 / Digital Power Users 258 / Emerging Digital 88.
+- **Weak levers:** geography (max digital gap 0.46pp) and age (all cohort CIs overlap). Occupation spreads ~6 FHS pts but tracks spend-to-income — target ratios, not demographics.
+- **Timing:** stressed months put 23.5% of spend value into 22–23h (vs 8.3%; bigger tickets, not more); Sun+Mon 42%. Healthy→Stretched slide = 72.4% Nov→Dec.
+- **No 'two years folded' caveat** — all timestamps are 2025; December uplift is uniform across 14 categories. Non-POS = 41% of trips AND of value (the old '21% of spend' mixed in online_spend_ratio).
+- **4 segments** (k-means k=4, silhouette 0.251, seed ARI 0.988, bootstrap ARI 0.911, 999/999 covered; correlate with age/gender p<0.01): Healthy&Engaged 351 / Stretched&Engaged 302 / Digital Power Users 258 / Emerging Digital 88.
 - **6-tool plan** priority: Budgeting(302) → Alerts(43) → Reminders(258) → Products(351) → Nudges(88) → Education(67).
 
 ## Regenerate everything
 ```bash
 PYTHONUTF8=1 py draft/task1_eda.py     # (task2..task5 likewise)
+PYTHONUTF8=1 py draft/task1_deep.py   # (task2..task5_deep likewise; task2_deep reads task1_age_ci.csv if present)
 PYTHONUTF8=1 py draft/make_charts.py   # charts
 node draft/build_deck.js               # deck -> draft/YAPPERS_BI10_R01.pptx
 ```

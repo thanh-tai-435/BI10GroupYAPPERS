@@ -1,0 +1,175 @@
+D:\BI10GroupYAPPERS\draft\task4_deep.py:74: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  fig.savefig("outputs/figures/t4_pca.png", dpi=150); plt.show()
+
+==============================================================================
+1. PREPROCESSING & FEATURE ENGINEERING
+==============================================================================
+Monthly rows 10,992 -> consumers 999
+Clustering features (8): ['financial_health_score', 'spend_to_income_ratio', 'credit_utilization_ratio', 'spending_volatility', 'engagement_score', 'transaction_count', 'discretionary_spend_ratio', 'online_spend_ratio']
+Nulls after aggregation: 0
+
+==============================================================================
+2. MODEL SELECTION - k via elbow + silhouette (k=2..8)
+==============================================================================
+  k      inertia   silhouette
+  2       5212.2       0.5574
+  3       3720.0       0.2952
+  4       3227.8       0.2508
+  5       2879.5       0.2318
+  6       2669.6       0.2197
+  7       2478.2       0.2057
+  8       2301.0       0.2170
+
+Silhouette winner overall: k=2 (0.5574)
+Chosen k=4 (best silhouette in the interpretable 4-6 range = 0.2508) - k=2/3 over-collapse the personas the case asks for.
+
+==============================================================================
+3. VALIDATION
+==============================================================================
+Coverage: 999/999 consumers assigned to exactly one segment (PASS)
+Final silhouette (k=4): 0.2510
+Cluster sizes:
+cluster
+0    302
+1     88
+2    351
+3    258
+
+==============================================================================
+4. SEGMENT PROFILES (cluster means, unscaled)
+==============================================================================
+Global means:
+financial_health_score        66.303
+spend_to_income_ratio          0.693
+credit_utilization_ratio       0.190
+spending_volatility            1.490
+engagement_score              75.401
+transaction_count            155.327
+discretionary_spend_ratio      0.546
+online_spend_ratio             0.247
+
+Per-cluster means:
+           n   pct  financial_health_score  spend_to_income_ratio  credit_utilization_ratio  spending_volatility  engagement_score  transaction_count  discretionary_spend_ratio  online_spend_ratio
+cluster                                                                                                                                                                                             
+0        302  30.2                  62.640                  0.835                     0.248                1.423            76.524            119.023                      0.519               0.208
+1         88   8.8                  65.694                  0.614                     0.173                0.679            49.550              9.744                      0.866               0.671
+2        351  35.1                  70.490                  0.571                     0.148                1.443            77.421            152.722                      0.513               0.200
+3        258  25.8                  65.101                  0.718                     0.188                1.910            80.156            251.022                      0.514               0.212
+
+Business labels:
+  cluster 0: Financially Stretched but Highly Engaged  (n=302, 30.2%)
+  cluster 1: Low Engagement & Emerging Digital  (n=88, 8.8%)
+  cluster 2: Financially Healthy & Highly Engaged  (n=351, 35.1%)
+  cluster 3: High-Activity Digital Power Users  (n=258, 25.8%)
+
+==============================================================================
+5. RULE-BASED 2x2 CROSS-CHECK (validation, not the delivered model)
+==============================================================================
+Split on medians: FHS=66.2, engagement=78.2
+Rule-based 2x2 sizes:
+rule2x2
+Stretched+Engaged        260
+Healthy+Disengaged       258
+Healthy+Engaged          243
+Vulnerable+Disengaged    238
+
+k-means x rule-2x2 crosstab (agreement check):
+rule2x2  Healthy+Disengaged  Healthy+Engaged  Stretched+Engaged  Vulnerable+Disengaged
+cluster                                                                               
+0                        26                3                110                    163
+1                        39                0                  0                     49
+2                       182              162                  2                      5
+3                        11               78                148                     21
+
+Saved draft/task4_features.csv  (999 rows, 15 cols incl. cluster/segment/demographics)
+Final coverage recheck: 999/999 labelled.
+(999, 23) -> draft/task4_features.csv
+-> draft/data_dictionary_task4.md
+ARI theo 20 seed: min 0.931 · TB 0.988
+ARI bootstrap 80%: TB 0.911 · 5th pct 0.843
+ARI k-means vs GMM: 0.259
+Khách ở biên (p<0.6): 34 (3.4%)
+GMM                                         0    1   2    3
+k-means                                                    
+Financially Healthy & Highly Engaged      101  104   1  145
+Financially Stretched but Highly Engaged   42   67   2  191
+High-Activity Digital Power Users         220   19   0   19
+Low Engagement & Emerging Digital           0    0  88    0
+Ma trận chuyển tháng t -> t+1 (% theo hàng):
+seg_next                                  Financially Healthy & Highly Engaged  ...  Low Engagement & Emerging Digital
+seg                                                                             ...                                   
+Financially Healthy & Highly Engaged                                      59.5  ...                                0.0
+Financially Stretched but Highly Engaged                                  33.8  ...                                0.0
+High-Activity Digital Power Users                                         39.0  ...                                0.0
+Low Engagement & Emerging Digital                                         20.0  ...                               80.0
+
+[4 rows x 4 columns]
+
+% tháng Healthy trượt sang Stretched ở tháng kế tiếp, theo tháng xuất phát:
+m
+1      5.7
+2     21.2
+3     14.0
+4     18.9
+5     33.7
+6     23.7
+7     21.4
+8      8.7
+9     15.9
+10    20.3
+11    72.4
+-> TB cả năm 23.3% | T10->T11 20.3% | T11->T12 72.4%
+Tuổi TB:
+                                           mean  median
+segment                                               
+Financially Healthy & Highly Engaged      52.7    53.0
+Financially Stretched but Highly Engaged  50.6    50.0
+High-Activity Digital Power Users         43.2    41.0
+Low Engagement & Emerging Digital         57.9    59.0
+
+% giới tính:
+ gender                                     Nam    Nữ
+segment                                             
+Financially Healthy & Highly Engaged      49.9  50.1
+Financially Stretched but Highly Engaged  56.6  43.4
+High-Activity Digital Power Users         39.5  60.5
+Low Engagement & Emerging Digital         52.3  47.7
+
+% nhóm tuổi:
+ age_grp                                   15-17  18-24  ...  55-64   65+
+segment                                                 ...             
+Financially Healthy & Highly Engaged        0.3    2.8  ...   22.8  23.9
+Financially Stretched but Highly Engaged    0.0    3.0  ...   16.6  21.2
+High-Activity Digital Power Users           2.3    9.7  ...    7.0  14.0
+Low Engagement & Emerging Digital           0.0   20.5  ...   30.7  35.2
+
+[4 rows x 7 columns]
+
+Top 3 tỉnh mỗi segment:
+  Financially Healthy & Highly Engaged: Thành phố Hồ Chí Minh 15%, Hà Nội 11%, Cần Thơ 5%
+  Financially Stretched but Highly Engaged: Thành phố Hồ Chí Minh 10%, Hà Nội 6%, Lâm Đồng 5%
+  High-Activity Digital Power Users: Thành phố Hồ Chí Minh 14%, Đồng Nai 7%, Hà Nội 5%
+  Low Engagement & Emerging Digital: Thành phố Hồ Chí Minh 16%, Hà Nội 9%, Quảng Ngãi 7%
+Chi-square segment x gender: p = 0.001  (có liên quan)
+Chi-square segment x age_grp: p = 0.000  (có liên quan)
+rule2x2                                   Healthy+Disengaged  ...  All
+segment                                                       ...     
+Financially Healthy & Highly Engaged                     182  ...  351
+Financially Stretched but Highly Engaged                  26  ...  302
+High-Activity Digital Power Users                         11  ...  258
+Low Engagement & Emerging Digital                         39  ...   88
+All                                                      258  ...  999
+
+[5 rows x 5 columns]
+
+Essential-focused (discretionary < 40%): 4 khách
+segment
+Financially Stretched but Highly Engaged    3
+Financially Healthy & Highly Engaged        1
+Name: count, dtype: int64
+
+Healthy but Disengaged (FHS>=70 & engagement<70): 25 khách
+segment
+Low Engagement & Emerging Digital       24
+Financially Healthy & Highly Engaged     1
+Name: count, dtype: int64

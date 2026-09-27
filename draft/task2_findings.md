@@ -134,3 +134,13 @@ Cohort mix skews to working-age (25–34: 12 months; 45–54: 10), mean age 47 v
 1. **Trigger on the month, not the person.** Distress is episodic (0 chronically unhealthy consumers). Segmentation for intervention must read *current-month* FHS, not a static risk list.
 2. **Two ratios are the whole game.** spend_to_income (−0.90) and credit_utilization (−0.86) define health; demographics add nothing. Score and alert on these.
 3. **The "Stressed but Engaged" 43 are the primary target (Task 5).** They are already active and digital, so reaching them costs nothing — deliver spend-pacing and utilization nudges in-app, framed as wellbeing help, never as a credit decision.
+
+---
+
+## Deep-dive (27/09) — `draft/task2_deep.py`, output in `task2_deep_output.txt`
+
+- **Province (new slide).** 22 of 27 provinces with ≥15 consumers have a 95% CI containing the national mean 66.3; extremes Thai Nguyen 63.0 and HCMC 67.6. Chart: `t2_demographics.png`.
+- **Occupation, grouped (396 titles → 8 keyword groups, mapping in code).** Engineering/science/IT **69.1** (n=229) and Business/finance **68.7** (n=126) vs Office/public services **64.5** (n=443) and Manual/trades **62.9** (n=23) — a **~6-point spread**, larger than age (1.2). But the ordering mirrors spend-to-income exactly (0.60–0.61 vs 0.76–0.79): occupation acts *through* the overspend ratio, so targeting stays on ratios. Student (n=3) and Retired (n=4) are too small to read.
+- **Timing of stressed spend (transaction file).** Stressed months put **23.5% of spend value into 22:00–23:59** vs 8.3% for healthy months; by transaction *count* the gap is only 11.6% vs 9.7%, so it is **bigger late-night tickets, not more of them** (median stressed month 23%, 51/95 months above 20%). Sunday+Monday carry 41.9% vs 34.0%. → Spend-alert window: Sunday–Monday evenings, before 22:00. Chart: `t2_timing.png`.
+- **Crossover sensitivity.** Engagement cutoff p70/p75/p80 gives 44/43/41 consumers and 52.6/51.6/48.4% of stress months at FHS<40 — the 43 / 52% result is stable. FHS<35 halves it (23), FHS<45 doubles it (89) as expected.
+- **Spend-to-income quintiles.** Mean FHS **72.4 → 68.4 → 66.0 → 63.8 → 60.9** from lowest to highest quintile (−11.4 pts, ~10× the age spread). Chart: `t2_sti_quintile.png`.

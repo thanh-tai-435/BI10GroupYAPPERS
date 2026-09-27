@@ -1,0 +1,92 @@
+D:\BI10GroupYAPPERS\draft\task5_deep.py:20: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  fig.tight_layout(); fig.savefig(f"outputs/figures/{name}", dpi=150, bbox_inches="tight"); plt.show(); print("saved", name)
+Base: 999 consumers | 10992 consumer-months
+
+=== T4 segments (consumer level) ===
+  Financially Healthy & Highly Engaged: 351 (35.1%)
+  Financially Stretched but Highly Engaged: 302 (30.2%)
+  High-Activity Digital Power Users: 258 (25.8%)
+  Low Engagement & Emerging Digital: 88 (8.8%)
+
+=== T2 crossover (Stressed & Engaged), month grain ===
+  engagement p75 = 81.40
+  stressed consumer-months (FHS<40): 95 (70 distinct)
+  crossover consumer-months: 49
+  crossover distinct consumers: 43 (4.3%)
+  share of all stress months: 52%
+
+=== T3 dormant good (FHS>=70 & eng<70), consumer level ===
+  25 (2.5%)
+
+=== T3 distress tail (FHS<70 & eng<70), consumer level ===
+  67 (6.7%)
+
+=== Age 25-34 cohort ===
+  177 (17.7%)
+
+=== Fairness: Stretched segment vs base (age/gender/top provinces) ===
+  Stretched n=302  mean age 50.6 vs base 50.1
+  gender mix stretched: {'Nam': 0.566, 'Nữ': 0.434}
+  gender mix base:      {'Nữ': 0.506, 'Nam': 0.494}
+  province over/under-representation (stretched share / base share), top provinces (base n>=15):
+    Thành phố Hồ Chí Minh (base n=135): 0.76x
+    Hà Nội (base n=80): 0.74x
+    Đồng Nai (base n=49): 0.81x
+    Cần Thơ (base n=45): 0.96x
+    Lâm Đồng (base n=40): 1.32x
+    Hưng Yên (base n=37): 1.07x
+    Phú Thọ (base n=37): 1.07x
+    Nghệ An (base n=36): 1.19x
+    Thanh Hóa (base n=36): 1.19x
+    Đồng Tháp (base n=36): 0.83x
+    Hải Phòng (base n=35): 0.95x
+    An Giang (base n=34): 1.17x
+    Đà Nẵng (base n=31): 1.17x
+    Bắc Ninh (base n=30): 0.66x
+    Vĩnh Long (base n=29): 1.25x
+    Ninh Bình (base n=28): 1.30x
+    Lào Cai (base n=24): 1.10x
+    Đắk Lắk (base n=24): 0.55x
+    Tây Ninh (base n=22): 0.60x
+    Cà Mau (base n=21): 1.42x
+    Khánh Hòa (base n=20): 0.99x
+    Sơn La (base n=19): 0.87x
+    Thái Nguyên (base n=18): 2.02x
+    Quảng Ngãi (base n=17): 1.36x
+    Tuyên Quang (base n=17): 0.78x
+    Gia Lai (base n=15): 1.10x
+    Huế (base n=15): 0.44x
+
+OK all assertions passed.
+
+==============================================================================
+Impact scenario - what if Budgeting trims spend-to-income? (illustrative, NOT a forecast)
+==============================================================================
+Month-level fit: FHS = 84.1 -25.33 x spend_to_income  (r = -0.90, n = 10,992)
+spend/income change (Stretched 302)  Stretched mean FHS  stress months (all 999)  consumers with a stress month
+                              Today                62.7                       95                             70
+                                -5%                63.7                       80                             59
+                               -10%                64.8                       65                             51
+                               -15%                65.9                       49                             40
+  -5%: stress months 95 -> 80 (-16%)
+  -10%: stress months 95 -> 65 (-32%)
+Caveat: FHS is partly built from spend fields -> slope is mechanical, directional only; validate with an A/B test.
+saved t5_impact_scenario.png
+
+==============================================================================
+Measurement plan - one KPI per tool, each tested with a randomised holdout
+==============================================================================
+               Tool                                       Target                                                             KPI                                            Test design
+     Budgeting tool                    Stretched & Engaged (302)                          spend-to-income ratio; % months FHS<40                           10% random holdout, 3 months
+       Spend alerts         Crossover (43; 52% of stress months) stress months per consumer; discretionary share in alert window                            alert vs no-alert, 2 months
+ Planning reminders Power Users (258) + Healthy (351) before Dec                  Nov->Dec slide Healthy->Stretched (base 72.4%)                             reminder in Nov vs holdout
+Financial education                           Distress tail (67)                   module completion; essential share next month                               opt-in cohort vs matched
+     Digital nudges                        Emerging Digital (88)                         active days / month; category diversity                             nudge vs holdout, 2 months
+Product suggestions                      Healthy & Engaged (351)                       opt-in savings/loyalty uptake; FHS stable offer vs holdout; guardrail: FHS never used for credit
+
+==============================================================================
+30/60/90-day roadmap
+==============================================================================
+  Days 0-30   Launch Budgeting (302) + Spend Alerts (43), timed Sun-Mon & 22-23h (Task 2 timing); set holdouts
+  Days 31-60  Planning Reminders before December (Nov->Dec slide 72.4%); Digital Nudges (88)
+  Days 61-90  Education (67) + opt-in Product suggestions (351); read A/B results, keep what moves the KPI

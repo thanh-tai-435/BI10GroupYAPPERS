@@ -41,7 +41,7 @@
 - **Digital share ≈ 41.2%** (QR + E-com + Mobile + Recurring), POS 58.8% — matches the Task 1 national context exactly.
 - **Average online spend share (online_spend_ratio): 21.0%** at consumer-month grain, **24.7%** at consumer level, ranging **0.0% → 95.1%** across customers.
 
-**BI insight:** Adoption breadth exists (QR is a real second rail at ~20% of trips) but **value is still overwhelmingly offline** — the *count* digital share (41%) is nearly double the *spend* digital share (21%), i.e. digital handles many small tickets (QR micro-payments) while big baskets stay on POS. The wide per-customer online_spend_ratio range (0–95%) is the real segmentation lever the flat engagement score cannot give — this is where digital-adoption campaigns should target.
+**BI insight:** Adoption breadth exists (QR is a real second rail at ~20% of trips) and value follows: non-POS channels carry 41.2% of trips and 41.5% of spend value (same ticket size as POS). *(Corrected 27/09: an earlier draft compared the channel count share with the separate `online_spend_ratio` field, 21%, which counts only truly online spend.)* The wide per-customer online_spend_ratio range (0–95%) is the real segmentation lever the flat engagement score cannot give — this is where digital-adoption campaigns should target.
 *Chart: **stacked/treemap bar** for channel mix; **histogram or box plot** of online_spend_ratio to show the 0–95% spread.*
 
 ---
@@ -120,4 +120,14 @@ Correlation with engagement_score: active_transaction_days **+0.589**, transacti
 1. **Do not segment on the engagement score.** It is saturated (91% "high") — a synthetic ceiling, not a differentiator. Segment on the *behaviours underneath it*: online_spend_ratio (0–95% spread), category_diversity, and consistency of activity.
 2. **Category diversity is the master signal (r = 0.94).** A falling category count is the earliest, cleanest flag that a customer is disengaging — build the churn/health early-warning on it, not on the composite score.
 3. **Two distinct at-risk tails, two different playbooks.** The 25 high-health/low-engagement are a **reactivation** problem (win back everyday offline use). The 67 low-health/low-engagement are a **wellbeing-intervention** problem (Task 5). Same low engagement, opposite remedies — do not merge them.
-4. **Digital is broad but shallow.** 41% of trips are digital but only 21% of spend — grow digital *value* (move big baskets onto QR/app), not just digital *reach*.
+4. **Digital is broad but shallow.** Non-POS is 41% of trips and of value, but truly online (E-com + Mobile) is only ~17% of value and concentrated in Emerging Digital — grow online depth, not just QR reach.
+
+---
+
+## Deep-dive (27/09) — `draft/task3_deep.py`, output in `task3_deep_output.txt`
+
+- **D1 shares per segment (consumers, modal month):** Low **1.0%** (10) · Medium **8.0%** (80) · High **74.1%** (740) · Very high **16.9%** (169). Chart: `t3_segment_share.png` (bar, not pie — a pie hides the 1% tail).
+- **D2 online share & who is digital.** Average online spend share **24.7%** (consumer level; 21.0% month level). By Task 4 segment, Emerging Digital sends **60.5% of spend through E-commerce + Mobile App** (34.3% + 26.2%) vs ~17% for the other three segments, whose channel mix is near-identical (POS ~58–59%).
+- **D3 diversity.** 908/999 consumers average 13–14 categories; the tail ≤8 is only 91. Excluding the tail, r(diversity, engagement) is still **+0.81** (Spearman on all +0.85) — the +0.94 is not a tail artefact. Chart: `t3_diversity_hist.png` (log y keeps the tail visible).
+- **D4 recency × frequency heatmap.** Engagement peaks at 30–31 active days & recency 0 (79.8, n=6,614); every 1–5-active-day cell stays ≤55 whatever the recency → consistency of activity matters more than recency. Chart: `t3_recency_frequency.png`.
+- **D5 cutoff justification.** FHS≥70 & engagement<60/65/70 all give **25** consumers (a natural gap in the data); engagement<75 jumps to 63 as it reaches the main body; FHS≥65 gives 47–48, FHS≥75 gives 9. The 70/70 rule sits in the gap.

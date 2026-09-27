@@ -266,7 +266,7 @@ barlabels(ax, bars, "{:.1f}%")
 ax.set_xticks(range(len(ch))); ax.set_xticklabels(ch.index, rotation=15, ha="right")
 ax.set_ylabel("Share of transactions (%)")
 ax.set_title("Channel mix: POS owns the base, QR the second rail")
-ax.annotate("Digital = 41.2% of trips\n(only 21% of spend value)", (0.97, 0.9),
+ax.annotate("Non-POS = 41.2% of trips\nand 41.5% of spend value", (0.97, 0.9),
             xycoords="axes fraction", ha="right", fontsize=10, color=C["ink"])
 save(fig, "t3_channel_mix.png")
 

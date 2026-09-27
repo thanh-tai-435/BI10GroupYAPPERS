@@ -117,3 +117,12 @@ Because the plan targets **behavioural ratios, not demographics**, it is structu
 - **Gender: monitor.** The stretched segment skews mildly male (56.6% vs 49.4% base). This is a data observation, not a targeting criterion — the tools key on spend/income, not gender — but the split should be **monitored** so the wellbeing programme doesn't inadvertently under-serve women who become stretched. Do not add gender as a targeting field.
 
 **Bottom line:** targeting on `spend_to_income_ratio` / `credit_utilization_ratio` / engagement behaviour means no protected demographic is used as a lever, and the ethical credit rule (§4) guarantees the downside is always "help offered," never "access denied."
+
+---
+
+## Deep-dive (27/09) — `draft/task5_deep.py`, output in `task5_deep_output.txt`
+
+- **Impact scenario (illustrative, not a forecast).** Month-level fit FHS = 84.1 − 25.3 × spend-to-income (r −0.90). If Budgeting trims spend-to-income for the Stretched segment (302): −5% → stress months (FHS<40) **95 → 80 (−16%)**; −10% → **65 (−32%)**; −15% → 49. Stretched mean FHS 62.7 → 64.8 at −10%. FHS partly embeds spend fields, so the slope is mechanical — validate with a holdout. Chart: `t5_impact_scenario.png`.
+- **Measurement.** One KPI per tool, each with a randomised holdout (e.g. Budgeting: spend-to-income and % stress months, 10% holdout for 3 months; Reminders: Nov→Dec Healthy→Stretched slide vs the 72.4% baseline).
+- **Roadmap.** Days 0–30 Budgeting + Spend Alerts (sent Sunday–Monday evenings, before 22:00); days 31–60 pre-December Planning Reminders + Digital Nudges (Emerging Digital: 60.5% of spend via E-com/Mobile); days 61–90 Education + opt-in Product suggestions, then keep what moves the KPI.
+- **Teammate inputs folded in:** alert timing (Task 2), 72.4% November→December slide (Task 4), Emerging Digital channel profile (Task 3), demographic correlation → behaviour-only triggers (Task 4).

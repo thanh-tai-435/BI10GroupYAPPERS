@@ -1,0 +1,304 @@
+
+==============================================================================
+Q1 - Distribution of financial_health_score
+==============================================================================
+CONSUMER LEVEL (n=999, mean of each consumer's months)
+  mean 66.30 | median 66.24 | std 4.67 | min 42.32 | max 80.83
+  IQR 63.40-69.28 | skew -0.315 (neg = left tail of low-health)
+    p5  = 58.61
+    p10 = 60.85
+    p25 = 63.40
+    p50 = 66.24
+    p75 = 69.28
+    p90 = 72.21
+    p95 = 73.91
+
+MONTH LEVEL (n=10992 consumer-months)
+  mean 66.37 | median 67.70 | std 9.48 | min 0.80 | max 90.20
+  month-to-month mean FHS:
+month
+1     71.72
+2     73.63
+3     67.28
+4     68.70
+5     66.93
+6     63.30
+7     63.79
+8     63.30
+9     67.74
+10    68.18
+11    67.53
+12    54.25
+
+Segment shares (financial_health_segment, consumer-months):
+  Ổn định                               7,965 ( 72.5%)
+  Cần theo dõi                          2,457 ( 22.4%)
+  Khỏe mạnh                               475 (  4.3%)
+  Có dấu hiệu căng thẳng tài chính         95 (  0.9%)
+
+  Consumer-months with FHS < 40: 95 (0.9%) | FHS >= 80: 475 (4.3%)
+  Consumers whose 12-mo mean FHS < 40: 0 (0.0%)
+
+==============================================================================
+Q2 - Main factors associated with low health (Pearson corr with FHS)
+==============================================================================
+Ranked |correlation| of ratio fields vs financial_health_score (n=10992 months):
+  -0.898  spend_to_income_ratio
+  -0.862  credit_utilization_ratio
+  -0.496  spending_volatility
+  +0.481  essential_spend_ratio
+  -0.481  discretionary_spend_ratio
+  -0.299  engagement_score
+  -0.273  online_spend_ratio
+  -0.206  average_transaction_value_vnd
+  -0.145  active_transaction_days
+  -0.069  category_diversity
+  +0.017  transaction_recency_days
+
+"Low health" defined as FHS < 40.
+  Low (FHS<40, n=95) vs Healthy (FHS>=80, n=475) mean of top drivers:
+    spend_to_income_ratio        low    2.098 | healthy    0.289
+    credit_utilization_ratio     low    0.582 | healthy    0.078
+    spending_volatility          low    3.017 | healthy    0.984
+    essential_spend_ratio        low    0.288 | healthy    0.611
+    discretionary_spend_ratio    low    0.712 | healthy    0.389
+    engagement_score             low   81.143 | healthy   72.741
+
+==============================================================================
+Q3 - Differences by occupation, age, province (consumer level)
+==============================================================================
+OCCUPATION: 396 distinct values, max 10 consumers each -> too fragmented to compare.
+  Occupations with >= 6 consumers (samples still tiny, read as noise):
+                         occupation  n  mean_fhs
+   Người dẫn chương trình phát sóng  6     59.08
+                Giáo viên tiếng anh  7     63.02
+             Nhà thiết kế triển lãm  6     63.05
+       Chuyên viên dự toán xây dựng  7     63.06
+    Biên tập viên chuyên đề tạp chí  6     63.34
+         Nhà trị liệu tâm lý trẻ em  6     64.00
+                Nhà thiết kế gốm sứ  6     64.12
+               Chuyên viên trắc địa  9     64.80
+              Chuyên viên dựng phim 10     64.85
+           Nhà địa chất hiện trường  6     65.06
+    Chuyên viên làm vườn thương mại  6     65.35
+Chuyên viên viết nội dung quảng cáo  7     66.40
+              Nhà tâm lý học pháp y  6     68.80
+   Giảng viên giáo dục thường xuyên  6     69.82
+                     Kỹ sư đóng tàu  6     70.04
+                 Kỹ sư khai thác mỏ  6     70.46
+                Nhà khoa học y sinh  6     70.98
+                     Kỹ sư vật liệu  7     71.13
+             Nhà khoa học thính học 10     71.20
+          Cán bộ quản lý thị trường  6     71.69
+                     Kỹ sư sản xuất  7     71.85
+  range across these: 12.77 FHS pts (Kỹ sư sản xuất 71.9 vs Người dẫn chương trình phát sóng 59.1)
+
+AGE COHORT:
+          n  mean_fhs
+cohort               
+15-24    69     65.75
+25-34   177     65.79
+35-44   165     66.44
+45-54   198     65.98
+55-64   175     66.97
+65+     215     66.56
+  spread best-worst: 1.22 FHS pts
+
+PROVINCE (only >= 15 consumers):
+             province   n  mean_fhs
+          Thái Nguyên  18     62.98
+              Gia Lai  15     64.17
+              Đà Nẵng  31     64.66
+               Cà Mau  21     64.74
+           Quảng Ngãi  17     65.27
+             Lâm Đồng  40     65.63
+            Khánh Hòa  20     65.79
+             Đồng Nai  49     65.93
+            Thanh Hóa  36     66.01
+              Lào Cai  24     66.05
+                  Huế  15     66.06
+            Đồng Tháp  36     66.19
+            Vĩnh Long  29     66.36
+            Ninh Bình  28     66.41
+              Nghệ An  36     66.43
+              Phú Thọ  37     66.44
+             Bắc Ninh  30     66.49
+             An Giang  34     66.50
+             Hưng Yên  37     66.64
+               Sơn La  19     66.72
+            Hải Phòng  35     67.00
+              Cần Thơ  45     67.06
+              Đắk Lắk  24     67.09
+             Tây Ninh  22     67.33
+Thành phố Hồ Chí Minh 135     67.59
+          Tuyên Quang  17     67.65
+               Hà Nội  80     67.82
+  spread best-worst: 4.84 FHS pts
+
+  National consumer-mean FHS = 66.30, std across consumers = 4.67
+
+==============================================================================
+Q4 - Crossover: financially stressed BUT highly engaged
+==============================================================================
+Note: 0 consumers have a 12-mo mean FHS < 40 (min = 42.32) -> stress is episodic, not a stable trait.
+Rule (consumer-month grain): financial_health_score < 40 AND engagement_score >= p75 (81.40).
+  Stressed consumer-months (FHS<40): 95 (70 distinct consumers)
+  CROSSOVER (stressed + high engagement): 49 consumer-months = 43 distinct consumers (4.3% of 999 consumers; 52% of stressed months)
+
+Profile (crossover-months vs all consumer-months, means):
+  financial_health_score       crossover    29.876 | all    66.366
+  engagement_score             crossover    88.639 | all    77.819
+  spend_to_income_ratio        crossover     1.890 | all     0.700
+  credit_utilization_ratio     crossover     0.548 | all     0.192
+  essential_spend_ratio        crossover     0.290 | all     0.481
+  discretionary_spend_ratio    crossover     0.710 | all     0.519
+  online_spend_ratio           crossover     0.486 | all     0.210
+  spending_volatility          crossover     2.055 | all     1.563
+  category_diversity           crossover    13.490 | all    13.662
+  active_transaction_days      crossover    26.429 | all    28.631
+  transaction_count            crossover    97.531 | all   168.522
+
+  Crossover age mean 47.0 vs all 49.3
+  Crossover cohort mix (consumer-months):
+age
+15-24     4
+25-34    12
+35-44     7
+45-54    10
+55-64     6
+65+      10
+
+[self-check OK] crossover ⊆ stressed (month grain)
+
+==============================================================================
+DEEP Q3a - Province: mean FHS with bootstrap 95% CI (provinces with >= 15 consumers)
+==============================================================================
+                       size   mean  ci_lo  ci_hi  ci_contains_national
+province                                                              
+Thái Nguyên              18  62.98  61.53  64.60                 False
+Gia Lai                  15  64.17  62.16  66.21                 False
+Đà Nẵng                  31  64.66  63.20  66.08                 False
+Cà Mau                   21  64.74  62.32  66.96                  True
+Quảng Ngãi               17  65.27  63.68  67.21                  True
+Lâm Đồng                 40  65.63  63.46  67.54                  True
+Khánh Hòa                20  65.79  63.94  67.80                  True
+Đồng Nai                 49  65.93  64.98  66.96                  True
+Thanh Hóa                36  66.01  64.48  67.32                  True
+Lào Cai                  24  66.05  63.69  68.23                  True
+Huế                      15  66.06  63.58  68.48                  True
+Đồng Tháp                36  66.19  64.89  67.54                  True
+Vĩnh Long                29  66.36  64.11  68.28                  True
+Ninh Bình                28  66.41  64.37  68.52                  True
+Nghệ An                  36  66.43  64.81  67.78                  True
+Phú Thọ                  37  66.44  65.23  67.67                  True
+Bắc Ninh                 30  66.49  65.19  67.63                  True
+An Giang                 34  66.50  65.17  67.90                  True
+Hưng Yên                 37  66.64  64.94  68.17                  True
+Sơn La                   19  66.72  64.86  68.52                  True
+Hải Phòng                35  67.00  65.81  68.16                  True
+Cần Thơ                  45  67.06  65.81  68.40                  True
+Đắk Lắk                  24  67.09  65.32  69.08                  True
+Tây Ninh                 22  67.33  65.79  68.98                  True
+Thành phố Hồ Chí Minh   135  67.59  66.80  68.35                 False
+Tuyên Quang              17  67.65  66.06  69.31                  True
+Hà Nội                   80  67.82  67.05  68.63                 FalseD:\BI10GroupYAPPERS\draft\task2_deep.py:19: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  fig.tight_layout(); fig.savefig(f"outputs/figures/{name}", dpi=150, bbox_inches="tight"); plt.show(); print("saved", name)
+D:\BI10GroupYAPPERS\draft\task2_deep.py:111: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  late = t[t.state == "stressed"].groupby(["consumer_id", "transaction_month"]).apply(
+D:\BI10GroupYAPPERS\draft\task2_deep.py:115: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  ess = t.groupby("state").apply(lambda d: 100 * (1 - d.loc[d.essential_spending_flag.astype(bool), 'spend_amount_vnd'].sum() / d.spend_amount_vnd.sum()))
+D:\BI10GroupYAPPERS\draft\task2_deep.py:19: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  fig.tight_layout(); fig.savefig(f"outputs/figures/{name}", dpi=150, bbox_inches="tight"); plt.show(); print("saved", name)
+D:\BI10GroupYAPPERS\draft\task2_deep.py:19: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  fig.tight_layout(); fig.savefig(f"outputs/figures/{name}", dpi=150, bbox_inches="tight"); plt.show(); print("saved", name)
+
+National mean 66.30; provinces whose CI excludes national: 5/27
+
+==============================================================================
+DEEP Q3b - Occupation grouped by keyword (396 raw titles -> 8 groups)
+==============================================================================
+                              n  mean_fhs  spend_to_income  credit_util   ci_lo   ci_hi
+occ_group                                                                              
+Manual / trades              23    62.942            0.793        0.238  60.560  64.797
+Other                        45    63.823            0.750        0.205  62.402  65.241
+Office / public services    443    64.498            0.756        0.207  64.158  64.865
+Retired / homemaker           4    65.077            0.723        0.213  61.088  69.067
+Education                    59    65.384            0.709        0.209  64.144  66.504
+Health                       67    67.730            0.643        0.180  66.414  69.004
+Business / finance          126    68.653            0.612        0.168  67.992  69.386
+Engineering / science / IT  229    69.126            0.605        0.163  68.619  69.597
+Student                       3    69.397            0.611        0.161  68.350  71.458
+Unmapped ('Other'): 45 consumers — sample: ['Điều phối viên tình nguyện', 'Phi công hàng không', 'Thủ thư thư viện công cộng', 'Sĩ quan hậu cần quân đội', 'Chánh văn phòng', 'Lính cứu hỏa', 'Kiểm lâm', 'Tiếp viên hàng không', 'Thủ thư học thuật', 'Sĩ quan huấn luyện quân đội', 'Quản trị viên tổ chức từ thiện', 'Cảnh sát']
+Spread of group means: 6.45 FHS pts
+
+==============================================================================
+DEEP Q3c - One chart: province / occupation group / age cohort, mean FHS ± 95% CI
+==============================================================================
+saved t2_demographics.png
+
+==============================================================================
+DEEP transactions - WHEN do stressed months spend? (day-of-week, hour, discretionary share)
+==============================================================================
+state
+healthy     40953
+stressed    11421
+
+Share of spend by day of week (%):
+ state  healthy  stressed
+Mon       18.0      21.0
+Tue       13.9      12.4
+Wed       14.5      11.3
+Thu       11.2       9.1
+Fri       12.4      12.6
+Sat       14.0      12.6
+Sun       16.0      21.0
+Sun+Mon share: stressed 41.9% vs healthy 34.0%
+
+Share of spend by hour band (%):
+ state      healthy  stressed
+hour_band                   
+00-05         25.1      16.7
+06-11         24.7      13.6
+12-17         24.8      29.9
+18-21         17.1      16.3
+22-23          8.3      23.5
+-> Biggest over-index for stressed months: 22-23 (+15.2pp of VALUE) -> candidate Spend-Alert timing
+Share of TRANSACTION COUNT by hour band (%) — robustness:
+ state      healthy  stressed
+hour_band                   
+00-05         21.4      20.8
+06-11         21.5      19.7
+12-17         28.4      28.9
+18-21         19.1      19.0
+22-23          9.7      11.6
+Per stressed month: median 22-23h value share 23.0% | months > 20%: 51/95
+-> Not MORE late-night transactions (count gap small) but BIGGER late-night tickets, in most stressed months.
+Discretionary share (txn-level): {'healthy': 40.5, 'stressed': 71.6}
+saved t2_timing.png
+
+==============================================================================
+DEEP Q4 - Crossover rule sensitivity (FHS cutoff x engagement percentile)
+==============================================================================
+health      engagement  consumers  months  %_of_stress_months
+FHS<35 eng>=p70 (80.6)         24      27                49.1
+FHS<35 eng>=p75 (81.4)         23      26                47.3
+FHS<35 eng>=p80 (82.3)         22      24                43.6
+FHS<40 eng>=p70 (80.6)         44      50                52.6
+FHS<40 eng>=p75 (81.4)         43      49                51.6
+FHS<40 eng>=p80 (82.3)         41      46                48.4
+FHS<45 eng>=p70 (80.6)         91     105                59.7
+FHS<45 eng>=p75 (81.4)         89     103                58.5
+FHS<45 eng>=p80 (82.3)         86      99                56.2
+
+==============================================================================
+DEEP Q2 - FHS by spend_to_income quintile (visual version of r = -0.90)
+==============================================================================
+              n    sti     fhs
+sti_q                         
+Q1 lowest   200  0.488  72.384
+Q2          200  0.610  68.433
+Q3          199  0.691  65.993
+Q4          200  0.774  63.760
+Q5 highest  200  0.902  60.942
+Q1 -> Q5 FHS drop: 11.4 pts (vs age spread 1.2 pts)
+saved t2_sti_quintile.png

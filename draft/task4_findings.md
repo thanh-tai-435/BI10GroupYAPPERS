@@ -78,8 +78,19 @@ Global means for reference: FHS 66.3 · spend/income 0.693 · credit-util 0.190 
 - **Feature selection is a judgement call.** We dropped near-constant columns and one collinear ratio; a different set (e.g. keeping category_diversity) would shift boundaries slightly.
 
 **Operational / data.**
-- **Synthetic, single-year (2025) data** with the two-years-folded-onto-2025 quirk from Task 1 — segment *sizes* are directionally real, not a production census.
+- **Synthetic, single-year (2025) data** with a uniform synthetic December uplift (Task 1) — segment *sizes* are directionally real, not a production census.
 - **Engagement is skewed high** (mean 75.4, mostly 74–81); the Emerging-Digital tail (engagement 49.6) is real but small, so that segment is the least statistically robust (n=88).
 - Segments are **not credit-risk tiers** and must not be used for lending decisions — this is a wellbeing lens.
 
 **Future work.** (1) Re-fit on multi-year data to make segments temporally stable and migration-trackable. (2) Add GMM/soft membership to quantify boundary confidence. (3) Engineer trajectory features (health slope, volatility trend) to catch consumers *entering* the stretched segment early — the highest-value early-warning signal for Task 5. (4) Validate segment stability via bootstrap resampling.
+
+---
+
+## Deep-dive (27/09) — `draft/task4_deep.py`, output in `task4_deep_output.txt`
+
+- **Preprocessed dataset delivered:** `draft/task4_features.csv` (999 × 23: 8 raw + 8 z-scaled features, cluster, segment, 2×2 label, demographics) + `draft/data_dictionary_task4.md`.
+- **Stability.** 20 random seeds: ARI vs the delivered solution mean **0.988** (min 0.931). Bootstrap (80% resample × 50): mean ARI **0.911** (5th pct 0.843). The k=4 partition is stable.
+- **Alternative model.** GMM (k=4, full covariance): ARI vs k-means only **0.259**, with just 3.4% of consumers below 0.6 membership probability. Emerging Digital (88) is identical in both; the three large segments are cut differently — they form one continuum (see `t4_pca.png`), which also explains the moderate silhouette.
+- **Monthly migration.** Assigning every consumer-month to the nearest centroid: a Healthy month is followed by a Stretched month **23.3%** of the time on average, but **72.4% from November to December** → pre-December planning reminders are the right timing.
+- **Demographics are correlated with segments** even though they were not clustering inputs: Power Users are younger (mean age 43.2 vs 50.6–57.9) and 60.5% female; chi-square segment × gender p=0.001, × age group p<0.001. Fairness implication: trigger every tool on behaviour, never target by age or gender.
+- **Suggested personas not formed:** Essential-Spend-Focused = only 4 consumers (discretionary <40%); Healthy-but-Disengaged = 25 consumers, 24 of them inside Emerging Digital.

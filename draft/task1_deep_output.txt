@@ -1,0 +1,193 @@
+D:\BI10GroupYAPPERS\draft\task1_deep.py:19: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  fig.tight_layout(); fig.savefig(f"outputs/figures/{name}", dpi=150, bbox_inches="tight"); plt.show(); print("saved", name)
+D:\BI10GroupYAPPERS\draft\task1_deep.py:61: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  gb = mon.groupby("fhs_bin", observed=True).apply(lambda d: pd.Series({
+
+==============================================================================
+Q1 - Peak vs trough month: driver = count or ticket?
+==============================================================================
+                            sum   count  avg_ticket  pct_annual
+transaction_month                                              
+1                  185570433000  104727   1771945.0         6.0
+2                  174365111000   97657   1785485.0         5.0
+3                  254750003000  143789   1771693.0         8.0
+4                  236320934000  134970   1750915.0         7.0
+5                  257623444000  146875   1754032.0         8.0
+6                  305572891000  173869   1757489.0         9.0
+7                  299556013000  172444   1737121.0         9.0
+8                  304519084000  176118   1729063.0         9.0
+9                  246520864000  140185   1758540.0         8.0
+10                 243005639000  138106   1759559.0         7.0
+11                 248795833000  143056   1739150.0         8.0
+12                 488032709000  280598   1739259.0        15.0
+
+Annual total spend: 3.24T VND
+PEAK  month 12: 488.03B VND (15.04% of annual) | 280,598 txns | ticket 1.74M VND
+TROUGH month 2: 174.37B VND (5.37% of annual) | 97,657 txns | ticket 1.79M VND
+Peak vs trough: spend +179.9%, count +187.3%, ticket -2.6%
+-> Driver = TRANSACTION COUNT
+
+==============================================================================
+Q2 - Essential vs Discretionary: stressed (FHS<40) vs healthy (FHS>=80)
+==============================================================================
+Stressed  (FHS<40) : 95 consumer-months / 70 consumers | Essential 28.4% | Discretionary 71.6% | mean essential_spend_ratio 0.288
+Healthy   (FHS>=80): 475 consumer-months / 303 consumers | Essential 59.5% | Discretionary 40.5% | mean essential_spend_ratio 0.611
+
+==============================================================================
+Q3 - High-spend provinces with below-average digital share
+==============================================================================
+National digital txn share: 41.2%  (POS 58.8%)
+
+High-spend (> median 82.69B VND) AND digital < national avg:
+  Hà Nội             spend    267.26B VND | digital  40.9% | POS  59.1% | gap -0.3pp
+  Đồng Nai           spend    183.07B VND | digital  40.7% | POS  59.3% | gap -0.5pp
+  Lâm Đồng           spend    135.39B VND | digital  41.1% | POS  58.9% | gap -0.1pp
+  Hưng Yên           spend    116.44B VND | digital  40.8% | POS  59.2% | gap -0.4pp
+  Hải Phòng          spend    103.15B VND | digital  40.8% | POS  59.2% | gap -0.3pp
+  Nghệ An            spend    101.73B VND | digital  41.2% | POS  58.8% | gap -0.0pp
+
+==============================================================================
+Q4 - Top category by count vs by spend; ticket comparison
+==============================================================================
+                                           sum   count  avg_ticket
+spending_category                                                 
+Siêu thị và tạp hóa tại cửa hàng  513773547000  176191   2916003.0
+Mua sắm tại cửa hàng              328376283000  166463   1972668.0
+Mua sắm trực tuyến                302823009000  139322   2173548.0
+Xăng dầu và di chuyển             298389366000  188029   1586933.0
+Nhà cửa và tiện ích               255242623000  175460   1454705.0
+Trẻ em và thú cưng                232595055000  161727   1438196.0
+Giải trí                          215068315000  134118   1603575.0
+Dịch vụ trực tuyến khác           181718969000   90654   2004533.0
+Mua sắm khác tại cửa hàng         178986707000  114229   1566911.0
+Ăn uống                           166660047000  130729   1274851.0
+Sức khỏe và thể thao              165716089000  122553   1352199.0
+Du lịch                           161945086000   57956   2794276.0
+Chăm sóc cá nhân                  156257711000  130085   1201197.0
+Tạp hóa trực tuyến                 87080151000   64878   1342214.0
+
+Top by COUNT: Xăng dầu và di chuyển -> 188,029 txns, ticket 1.59M VND
+Top by SPEND: Siêu thị và tạp hóa tại cửa hàng -> 513.77B VND, ticket 2.92M VND
+Ticket ratio (spend-leader / count-leader): 1.8x
+
+==============================================================================
+Q5 - Age cohort: active but lowest financial health
+==============================================================================
+        consumers  avg_fhs  avg_txn  avg_active_days  ess_ratio  spend_to_income
+cohort                                                                          
+15-24          69   65.940  221.605           28.436      0.355            0.676
+25-34         177   65.785  178.745           28.940      0.468            0.716
+35-44         165   66.442  199.360           29.275      0.464            0.694
+45-54         198   65.980  176.860           28.847      0.493            0.712
+55-64         175   66.997  129.574           27.936      0.508            0.696
+65+           215   66.856  139.147           28.160      0.509            0.685
+
+Most vulnerable (active but lowest FHS): cohort 25-34
+  avg FHS 65.8 vs cohort best 67.0 | txns 178.7 | ess_ratio 0.468 | spend/income 0.716
+  National mean spend/income 0.700, ess_ratio 0.481
+
+==============================================================================
+DEEP Q3 - Channel breakdown for high-spend, below-average-digital provinces
+==============================================================================
+Share of TRANSACTIONS by channel (%):
+ transaction_channel   POS  QR Payment  E-commerce  Mobile App  Recurring Payment
+province_city                                                                   
+Hà Nội               59.1        19.9         8.5         7.6                4.9
+Đồng Nai             59.3        19.8         8.5         7.6                4.8
+Lâm Đồng             58.9        19.7         8.7         7.6                5.1
+Hưng Yên             59.2        19.8         8.4         7.4                5.1
+Hải Phòng            59.2        20.1         8.5         7.4                4.9
+National             58.8        19.8         8.7         7.7                4.9
+
+Share of SPEND VALUE by channel (%):
+ transaction_channel   POS  QR Payment  E-commerce  Mobile App  Recurring Payment
+province_city                                                                   
+Hà Nội               59.1        19.9         9.2         7.4                4.4
+Đồng Nai             58.7        19.7         9.8         7.3                4.6
+Lâm Đồng             58.7        19.9         9.3         7.6                4.6
+Hưng Yên             58.7        20.3         9.3         7.0                4.7
+Hải Phòng            58.5        20.5         9.0         7.4                4.6
+National             58.5        19.6         9.6         7.6                4.6
+
+Digital-share gap vs national (pp, by count):
+ province_city
+Hà Nội      -0.31
+Đồng Nai    -0.46
+Lâm Đồng    -0.08
+Hưng Yên    -0.40
+Hải Phòng   -0.34
+-> max |gap| = 0.46pp: channel mix is near-identical; digital value share 40.9-41.5% vs national 41.5%
+saved t1_province_channel.png
+
+==============================================================================
+DEEP Q2 - Is the essential->discretionary inversion a gradient or a threshold artefact?
+==============================================================================
+         months  discretionary_pct
+fhs_bin                           
+<40        95.0               71.6
+40-49     429.0               64.2
+50-59    2028.0               57.3
+60-69    4060.0               54.4
+70-79    3905.0               49.2
+80-89     474.0               40.6
+90+         1.0               17.4
+Spearman(FHS, discretionary_spend_ratio) month grain: -0.474
+  FHS<35 (   55 mo)  73.5% discretionary  vs  FHS>=85 (   36 mo)  30.2%  -> gap +43.3pp
+  FHS<40 (   95 mo)  71.6% discretionary  vs  FHS>=80 (  475 mo)  40.5%  -> gap +31.1ppD:\BI10GroupYAPPERS\draft\task1_deep.py:19: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  fig.tight_layout(); fig.savefig(f"outputs/figures/{name}", dpi=150, bbox_inches="tight"); plt.show(); print("saved", name)
+
+  FHS<45 (  176 mo)  68.7% discretionary  vs  FHS>=75 ( 1964 mo)  45.6%  -> gap +23.1pp
+  FHS<50 (  524 mo)  65.4% discretionary  vs  FHS>=70 ( 4380 mo)  48.7%  -> gap +16.7pp
+saved t1_discretionary_gradient.png
+
+==============================================================================
+DEEP Q1 - Which categories drive the December peak? + 2-year fold check
+==============================================================================
+Dec - Feb transaction count, total increase 182,941:
+                                  increase  share_of_increase_%  growth_%
+spending_category                                                        
+Chăm sóc cá nhân                     12962                  7.1     190.0
+Du lịch                               5742                  3.1     188.0
+Dịch vụ trực tuyến khác               8941                  4.9     191.0
+Giải trí                             13361                  7.3     191.0
+Mua sắm khác tại cửa hàng            11499                  6.3     192.0
+Mua sắm trực tuyến                   13834                  7.6     189.0
+Mua sắm tại cửa hàng                 16535                  9.0     186.0
+Nhà cửa và tiện ích                  17585                  9.6     193.0
+Siêu thị và tạp hóa tại cửa hàng     17053                  9.3     181.0
+Sức khỏe và thể thao                 11974                  6.5     184.0
+Trẻ em và thú cưng                   15853                  8.7     187.0
+Tạp hóa trực tuyến                    6425                  3.5     183.0
+Xăng dầu và di chuyển                18648                 10.2     187.0
+Ăn uống                              12529                  6.8     182.0
+
+activity_datetime years:
+ activity_datetime
+2025    1852394
+December rows by year:
+ activity_datetime
+2025    280598
+
+==============================================================================
+DEEP Q4 - Reach & habit of the two top categories
+==============================================================================
+Xăng dầu và di chuyển: 967/999 consumers buy it (96.8%) | 17.3 purchases per buyer-month | active in 11.2 months/yr
+Siêu thị và tạp hóa tại cửa hàng: 992/999 consumers buy it (99.3%) | 16.1 purchases per buyer-month | active in 11.0 months/yr
+
+==============================================================================
+DEEP Q5 - Bootstrap 95% CI of mean FHS per age cohort (consumer level, all 999 incl. 7 minors)
+==============================================================================
+          n  mean_fhs  ci_lo  ci_hi
+cohort                             
+15-24    69     65.75  64.73  66.74
+25-34   177     65.79  65.09  66.43
+35-44   165     66.44  65.83  67.09
+45-54   198     65.98  65.34  66.61
+55-64   175     66.97  66.35  67.60
+65+     215     66.56  65.83  67.26
+All CIs overlap: True (max lower 66.35 vs min upper 66.43)
+
+==============================================================================
+Slide 4 dataset check
+==============================================================================
+consumer-months 10,992 | consumers 999 | transactions 1,852,394 | min age 15 | minors 7
