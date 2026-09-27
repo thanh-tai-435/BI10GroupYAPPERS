@@ -46,21 +46,24 @@ Each task in `draft/`: `taskN*.py` (analysis) + `taskN_output.txt` (captured run
 - `build_deck.js` → **`draft/YAPPERS_BI10_R01.pptx`** (**22 slides**, auto-numbered, QA'd 27/09).
 - Team guide: `draft/YAPPERS_huong_dan_Colab.xlsx` (per-person sheets, statuses).
 
-## Key findings (the spine)
-- **Overspend drives low health:** spend-to-income r −0.90, credit-utilization r −0.86. Not low income.
-- **Budget inverts under stress:** stressed (FHS<40) = 72% discretionary vs healthy (FHS≥80) = 40%. Strongest signal.
-- **Stress is episodic:** 0/999 chronically stressed; crossover (FHS<40 & engagement≥p75 81.4) = 43 consumers = 52% of all stress episodes.
-- **Weak levers:** geography (max digital gap 0.46pp) and age (all cohort CIs overlap). Occupation spreads ~6 FHS pts but tracks spend-to-income — target ratios, not demographics.
-- **Timing:** stressed months put 23.5% of spend value into 22–23h (vs 8.3%; bigger tickets, not more); Sun+Mon 42%. Healthy→Stretched slide = 72.4% Nov→Dec.
-- **Two-years-folded caveat is REAL** (case study §12: two source years folded onto 2025, timestamps re-dated so all read 2025; inflates monthly volume). Dec uplift is uniform across 14 categories. Non-POS = 41% of trips AND of value (the old '21% of spend' mixed in online_spend_ratio).
-- **4 segments** (k-means k=4, silhouette 0.251, seed ARI 0.988, bootstrap ARI 0.911, 999/999 covered; correlate with age/gender p<0.01): Healthy&Engaged 351 / Stretched&Engaged 302 / Digital Power Users 258 / Emerging Digital 88.
-- **6-tool plan** priority: Budgeting(302) → Alerts(43) → Reminders(258) → Products(351) → Nudges(88) → Education(67).
+## Key findings (the spine) — revised 28/09 after 6-agent review (draft/review/review_*.md)
+Deck (`draft/build_deck.js`) + submission notebook are the source of truth; `draft/task*_findings.md` pre-date the review.
+- **Overspend drives low health:** spend-to-income r −0.90, utilization r −0.86 (one factor, R² 0.82). 98% of stress months spend > income.
+- **Budget inverts under stress:** 71.6% vs 40.5% discretionary; flip is in VALUE (purchases ≥10M VND = 4.3% of stressed txns, 54% of value).
+- **Stress is episodic:** 0/999 stressed on average, 869 (87%) dip below 60 once; crossover rule = 43 consumers = 52% of stress months (39 Stretched + 4 Healthy).
+- **Timing:** stressed months put 23.5% of spend value at 22–23h (median 23%/month). The Sunday+Monday claim was DROPPED (not robust per month).
+- **December** lowers FHS ~13 pts in every full-year segment (calendar effect). The old "72% Healthy→Stretched Nov→Dec" claim was DROPPED (seasonality artefact).
+- **91 one-off customers** (1–2 months / 1–2 active days) = the whole low-engagement tail; 88 of them = the Occasional Online-First segment.
+- **Segments (renamed):** Healthy & Engaged 351 / Stretched & Engaged 302 / High-Activity Users 258 / Occasional Online-First 88 (≈ brief's Emerging Digital).
+- **Ranking** = reach × |r(trigger, outcome)|, wellbeing first: Budgeting 271 → Reminders 128 → Alerts 37 → Education 32 | Products 74 → Nudges 52. Alerts launched first (exception).
+- **Two-years-folded caveat is REAL** (case study §12). Q3 has 6 provinces (incl. Nghe An). Top province FHS = Ha Noi 67.8.
 
 ## Regenerate everything
 ```bash
 PYTHONUTF8=1 py draft/task1_eda.py     # (task2..task5 likewise)
 PYTHONUTF8=1 py draft/task1_deep.py   # (task2..task5_deep likewise; task2_deep reads task1_age_ci.csv if present)
 PYTHONUTF8=1 py draft/make_charts.py   # charts
+for f in draft/review/t*_charts_v2.py; do PYTHONUTF8=1 py $f; done   # v2_* charts used by the deck
 node draft/build_deck.js               # deck -> draft/YAPPERS_BI10_R01.pptx
 ```
 

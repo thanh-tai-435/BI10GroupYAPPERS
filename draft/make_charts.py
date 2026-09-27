@@ -190,7 +190,7 @@ save(fig, "t2_fhs_distribution.png")
 RATIOS = ["spend_to_income_ratio", "credit_utilization_ratio", "essential_spend_ratio",
           "discretionary_spend_ratio", "online_spend_ratio", "spending_volatility",
           "category_diversity", "engagement_score", "transaction_recency_days",
-          "average_transaction_value_vnd", "active_transaction_days"]
+          "active_transaction_days"]
 corr = mon[["financial_health_score"] + RATIOS].corr()["financial_health_score"].drop("financial_health_score")
 corr = corr.reindex(corr.abs().sort_values().index)  # ascending for barh
 fig, ax = plt.subplots()
